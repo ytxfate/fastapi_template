@@ -17,5 +17,6 @@ from project.modules.user.user import user_router
 api = APIRouter()
 
 
-api.include_router(user_auth, prefix='/user_auth', tags=['user_auth'])
-api.include_router(user_router, prefix='/user', tags=['user'], dependencies=[Depends(check_jwt)])
+api.include_router(user_auth, prefix='/user_auth', tags=['认证'])
+api.include_router(user_router, prefix='/user', tags=['示例接口'],
+                   dependencies=[Depends(check_jwt)])
