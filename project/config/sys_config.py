@@ -22,3 +22,7 @@ SECRET_KEY = "xxx"
 # True : 生产系统
 # False: 测试系统
 isFormalSystem = False
+
+# 接口前缀及版本控制
+__version = "1.0"
+prefix_api_path = "/api/{version}".format(version=__version)

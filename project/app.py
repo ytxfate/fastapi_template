@@ -10,6 +10,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 # User-defined Modules
+from project.config.sys_config import prefix_api_path
 
 
 app = FastAPI()
@@ -27,7 +28,7 @@ app.add_middleware(
 
 # 添加接口
 from project.endpoints.endpoints import api
-app.include_router(api, prefix="/api")
+app.include_router(api, prefix=prefix_api_path)
 
 
 # 全局自定义异常处理

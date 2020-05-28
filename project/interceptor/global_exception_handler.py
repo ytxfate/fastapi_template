@@ -10,6 +10,7 @@
 from fastapi.requests import Request
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.status import HTTP_401_UNAUTHORIZED
 import logging
 # User-defined Modules
 from project.app import app
@@ -33,6 +34,11 @@ async def handle_request_validation_error(request: Request, exc: RequestValidati
 @app.exception_handler(StarletteHTTPException)
 async def handle_http_exception(request: Request, exc: StarletteHTTPException):
     logger.exception(exc)
+    # 用户认证
+    if exc.status_code == HTTP_401_UNAUTHORIZED:
+        return comm_ret(code=resp_code.USER_NO_LOGIN, msg="用户未登录")
+    elif exc.status_code == resp_code.JWT_PARSE_ERROR:
+        return comm_ret(code=resp_code.JWT_PARSE_ERROR, msg=exc.detail)
     return comm_ret(
         code=resp_code.EXCEPTION_ERROR,
         isSuccess=False,
