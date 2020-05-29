@@ -9,6 +9,7 @@
 # The Python Standard Modules(Library) and Third Modules(Library)
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
+from datetime import datetime, date
 # User-defined Modules
 from project.utils.resp_code import SUCCESS
 
@@ -31,4 +32,10 @@ def comm_ret(code: int = SUCCESS, isSuccess: bool = True,
         "msg": msg,
         "resp": resp
     }
-    return JSONResponse(content=jsonable_encoder(ret_json))
+    return JSONResponse(content=jsonable_encoder(
+        ret_json,
+        custom_encoder={
+            datetime: lambda v: v.strftime("%Y-%m-%d %H:%M:%S"),
+            date: lambda v: v.strftime("%Y-%m-%d"),
+        }
+    ))
