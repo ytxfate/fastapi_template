@@ -102,7 +102,7 @@ class JWTAuth:
             @param:
                 jwt_body: jwt 字串
             @return:
-                当 解析状态 为 True 时，解析成功；否则解析失败            
+                返回解析的结果， 若返回 {} 则解析失败            
         """
         user_info = {}
         try:

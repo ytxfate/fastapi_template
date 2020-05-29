@@ -16,12 +16,15 @@ from fastapi.exceptions import HTTPException
 from starlette.status import HTTP_401_UNAUTHORIZED
 from pydantic import constr
 from datetime import datetime
+import logging
 # User-defined Modules
 from project.utils.comm_ret import comm_ret
 from project.models.auth_models import JWTBodyInfo
 from project.utils.jwt_auth import JWTAuth
 from project.utils import resp_code
 
+
+logger = logging.getLogger(__name__)
 
 user_auth = APIRouter()
 
@@ -65,8 +68,7 @@ def refresh_token(
     # fastapi 在 Header Authorization 中加了前缀 Bearer
     scheme, Authorization = get_authorization_scheme_param(Authorization)
     if scheme.lower() != "bearer":
-        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED,
-                            detail="用户未登录")
+        return comm_ret(code=resp_code.JWT_PARSE_ERROR, msg="JWT 信息解析异常")
     # 校验 refresh_jwt 
     decode_status, _ = JWTAuth().decode_jwt(refresh_jwt)
     if decode_status is False:
@@ -74,6 +76,13 @@ def refresh_token(
                 code=resp_code.USER_NO_LOGIN, msg="刷新 jwt 失败，重新登录")
     # 解析 jwt
     user_info = JWTAuth().decode_jwt_without_check(Authorization)
+    # 校验 user_info
+    try:
+        JWTBodyInfo(**user_info)
+    except Exception as e:
+        logger.exception(e)
+        return comm_ret(code=resp_code.JWT_PARSE_ERROR, msg="JWT 信息解析异常")
+    
     status, new_jwt, new_refresh_jwt = JWTAuth().create_jwt_and_refresh_jwt(
         user_info)
     if status is False:
