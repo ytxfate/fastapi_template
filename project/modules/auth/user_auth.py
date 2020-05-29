@@ -11,6 +11,9 @@ from fastapi import APIRouter, Depends, Header, Query
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security.utils import get_authorization_scheme_param
+from fastapi.exceptions import HTTPException
+from starlette.status import HTTP_401_UNAUTHORIZED
 from pydantic import constr
 from datetime import datetime
 # User-defined Modules
@@ -59,6 +62,11 @@ def refresh_token(
     Authorization: constr(strip_whitespace=True, min_length=1)=Header(..., title="jwt"),
     refresh_jwt: constr(strip_whitespace=True, min_length=1)=Query(..., title="refresh_jwt")
 ):
+    # fastapi 在 Header Authorization 中加了前缀 Bearer
+    scheme, Authorization = get_authorization_scheme_param(Authorization)
+    if scheme.lower() != "bearer":
+        raise HTTPException(status_code=HTTP_401_UNAUTHORIZED,
+                            detail="用户未登录")
     # 校验 refresh_jwt 
     decode_status, _ = JWTAuth().decode_jwt(refresh_jwt)
     if decode_status is False:
