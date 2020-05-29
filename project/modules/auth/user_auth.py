@@ -76,7 +76,7 @@ def refresh_token(
                 code=resp_code.USER_NO_LOGIN, msg="刷新 jwt 失败，重新登录")
     # 解析 jwt
     user_info = JWTAuth().decode_jwt_without_check(Authorization)
-    # 校验 user_info
+    # 校验 user_info 不为空字典 {}
     try:
         JWTBodyInfo(**user_info)
     except Exception as e:
