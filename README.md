@@ -24,6 +24,8 @@
 │   ├── modules									项目模块管理
 │   │   ├── auth								Auth 模块
 │   │   │   └── user_auth.py					Auth(登录\刷新Jwt等)
+│   │   ├── info								info 模块 (scopes样例)
+│   │   │   └── info.py							info 模块 (scopes样例)
 │   │   └── user								user 模块开发（示例）
 │   │       └── user.py							user 具体模块开发（示例）
 │   └── utils									工具目录
@@ -33,8 +35,8 @@
 │       ├── operate_minio.py					MinIO 操作（实例）
 │       ├── operate_mongodb.py					MongoDB 数据库操作（实例）
 │       ├── operate_redis.py					Redis 数据库操作（实例）
-│       └── resp_code.py						response 状态码  （其他状态码可自行根据开发需要添加添加）
-└── README.md									项目依赖
+│       └── resp_code.py						response 状态码  （其他状态码可自行根据开发需要添加添加）									
+└── requirements.txt							项目依赖
 ```
 
 
