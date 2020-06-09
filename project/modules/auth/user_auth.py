@@ -42,7 +42,7 @@ def user_login(login_info: OAuth2PasswordRequestForm=Depends()):
     code == 1200 , 需重新登录后跳转;  
     code == 1101 , 再次请求; (基本不需要)  
     """
-    user_info = JWTBodyInfo(username="user").dict()
+    user_info = JWTBodyInfo(username="user", scopes=['info1']).dict()
     status, jwt, refresh_jwt = JWTAuth().create_jwt_and_refresh_jwt(user_info)
     if status is False:
         return comm_ret(

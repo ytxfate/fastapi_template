@@ -37,10 +37,11 @@ async def handle_http_exception(request: Request, exc: StarletteHTTPException):
     # 用户认证
     # 此处添加异常校验的原因是 project/dependencies/auth_depend.py 中自定义的
     # check_jwt 函数只能通过 raise 异常的方式返回结果
-    if exc.status_code == HTTP_401_UNAUTHORIZED:
-        return comm_ret(code=resp_code.USER_NO_LOGIN, msg="用户未登录")
-    elif exc.status_code == resp_code.JWT_PARSE_ERROR:
-        return comm_ret(code=resp_code.JWT_PARSE_ERROR, msg=exc.detail)
+    if exc.status_code in [
+        resp_code.JWT_PARSE_ERROR, resp_code.USER_NO_AUTHORITY, 
+        resp_code.USER_NO_LOGIN
+    ]:
+        return comm_ret(code=exc.status_code, msg=exc.detail)
     
     return comm_ret(
         code=resp_code.EXCEPTION_ERROR,
