@@ -36,7 +36,13 @@
 │       ├── operate_mongodb.py					MongoDB 数据库操作（实例）
 │       ├── operate_redis.py					Redis 数据库操作（实例）
 │       └── resp_code.py						response 状态码  （其他状态码可自行根据开发需要添加添加）									
-└── requirements.txt							项目依赖
+├── requirements.txt							项目依赖
+└── resources									资源目录(建议前后端分离,不使用此模块)
+    ├── static									静态文件目录
+    │   └── css									css 目录(示例)
+    │       └── index.css						(css 文件示例)
+    └── templates								html 页面目录
+        └── index.html							(html 文件示例)
 ```
 
 
