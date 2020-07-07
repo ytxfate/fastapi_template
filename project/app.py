@@ -17,8 +17,9 @@ from project.config.sys_config import prefix_api_path, isFormalSystem
 # 判断是否展示接口文档
 docs_url = (prefix_api_path + "/docs") if isFormalSystem is False else None
 redoc_url = (prefix_api_path + "/redoc") if isFormalSystem is False else None
+openapi_url = (prefix_api_path + "/openapi.json")
 
-app = FastAPI(docs_url=docs_url, redoc_url=redoc_url)
+app = FastAPI(docs_url=docs_url, redoc_url=redoc_url, openapi_url=openapi_url)
 
 
 # 跨域处理
