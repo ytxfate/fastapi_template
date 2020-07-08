@@ -22,7 +22,8 @@ from project.models.auth_models import JWTBodyInfo
 
 __oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl=prefix_api_path+"/user_auth/login",
-    scopes={"emp": "emp", "cus": "cus"}
+    scopes={"emp": "emp", "cus": "cus"},
+    auto_error=False    # 不由 OAuth2PasswordBearer raise HTTPException
 )
 
 logger = logging.getLogger(__name__)
