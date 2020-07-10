@@ -22,6 +22,7 @@ from project.utils.comm_ret import comm_ret
 from project.models.auth_models import JWTBodyInfo
 from project.utils.jwt_auth import JWTAuth
 from project.utils import resp_code
+from project.dependencies.auth_depend import check_jwt
 
 
 logger = logging.getLogger(__name__)
@@ -62,29 +63,16 @@ def user_login(login_info: OAuth2PasswordRequestForm=Depends()):
 
 @user_auth.get("/refresh_token", name="刷新 Token 信息")
 def refresh_token(
-    Authorization: constr(strip_whitespace=True, min_length=1)=Header(..., title="jwt"),
+    jwt_info: JWTBodyInfo=Depends(check_jwt),
     refresh_jwt: constr(strip_whitespace=True, min_length=1)=Query(..., title="refresh_jwt")
 ):
-    # fastapi 在 Header Authorization 中加了前缀 Bearer
-    scheme, Authorization = get_authorization_scheme_param(Authorization)
-    if scheme.lower() != "bearer":
-        return comm_ret(code=resp_code.JWT_PARSE_ERROR, msg="JWT 信息解析异常")
-    # 校验 refresh_jwt 
     decode_status, _ = JWTAuth().decode_jwt(refresh_jwt)
     if decode_status is False:
         return comm_ret(
                 code=resp_code.USER_NO_LOGIN, msg="刷新 jwt 失败，重新登录")
-    # 解析 jwt
-    user_info = JWTAuth().decode_jwt_without_check(Authorization)
-    # 校验 user_info 不为空字典 {}
-    try:
-        JWTBodyInfo(**user_info)
-    except Exception as e:
-        logger.exception(e)
-        return comm_ret(code=resp_code.JWT_PARSE_ERROR, msg="JWT 信息解析异常")
     
     status, new_jwt, new_refresh_jwt = JWTAuth().create_jwt_and_refresh_jwt(
-        user_info)
+        jwt_info.dict())
     if status is False:
         return comm_ret(code=resp_code.JWT_CREATE_ERROR, msg="JWT 信息生成异常")
 
