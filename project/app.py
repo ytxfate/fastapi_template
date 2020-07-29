@@ -12,14 +12,18 @@ from starlette.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from starlette.requests import Request
 # User-defined Modules
-from project.config.sys_config import prefix_api_path, isFormalSystem
+from project.config.sys_config import (prefix_api_path, isFormalSystem,
+                                       API_DOC_TITLE, API_DOC_DESC,
+                                       API_DOC_VERSION)
 
 # 判断是否展示接口文档
 docs_url = (prefix_api_path + "/docs") if isFormalSystem is False else None
 redoc_url = (prefix_api_path + "/redoc") if isFormalSystem is False else None
 openapi_url = (prefix_api_path + "/openapi.json")
 
-app = FastAPI(docs_url=docs_url, redoc_url=redoc_url, openapi_url=openapi_url)
+app = FastAPI(docs_url=docs_url, redoc_url=redoc_url, openapi_url=openapi_url,
+              title=API_DOC_TITLE, description=API_DOC_DESC,
+              version=API_DOC_VERSION)
 
 
 # 跨域处理
