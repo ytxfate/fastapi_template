@@ -24,5 +24,10 @@ SECRET_KEY = "xxx"
 isFormalSystem = False
 
 # 接口前缀及版本控制
-__version = "1.0"
+__version = "v1.0"
 prefix_api_path = "/api/{version}".format(version=__version)
+
+# api 文档描述
+API_DOC_TITLE = "xxx"
+API_DOC_DESC = "xxx"
+API_DOC_VERSION = __version
