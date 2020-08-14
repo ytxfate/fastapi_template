@@ -28,18 +28,24 @@ __oauth2_scheme = OAuth2PasswordBearer(
 
 logger = logging.getLogger(__name__)
 
-async def check_jwt(
+def _check(
     security_scopes: SecurityScopes,
-    jwt: constr(strip_whitespace=True)=Depends(__oauth2_scheme)
+    jwt: constr(strip_whitespace=True)=Depends(__oauth2_scheme),
+    jwt_stat: constr(strip_whitespace=True)=""
 ):
+    """ token 检验
+    """
     if not jwt:
         raise HTTPException(status_code=resp_code.USER_NO_LOGIN,
                             detail="用户未登录")
     # 解析 jwt 信息
-    decode_status, user_info = JWTAuth().decode_jwt(jwt)
-    if decode_status is False or not user_info:
-        raise HTTPException(status_code=resp_code.JWT_PARSE_ERROR,
-                            detail="刷新用户令牌中...")
+    if jwt_stat == "NOT":
+        user_info = JWTAuth().decode_jwt_without_check(jwt)
+    else:
+        decode_status, user_info = JWTAuth().decode_jwt(jwt)
+        if decode_status is False or not user_info:
+            raise HTTPException(status_code=resp_code.JWT_PARSE_ERROR,
+                                detail="刷新用户令牌中...")
     try:
         jwtbi = JWTBodyInfo(**user_info)
     except Exception as e:
@@ -57,3 +63,21 @@ async def check_jwt(
                                 detail="用户没有此接口的权限")
     else:
         return jwtbi
+
+async def check_jwt(
+    security_scopes: SecurityScopes,
+    jwt: constr(strip_whitespace=True)=Depends(__oauth2_scheme)
+):
+    """ 通用 token 检验
+    """
+    return _check(security_scopes, jwt)
+
+
+async def not_realy_check_jwt(
+    security_scopes: SecurityScopes,
+    jwt: constr(strip_whitespace=True)=Depends(__oauth2_scheme)
+):
+    """ 刷新 token 时调用
+    """
+    return _check(security_scopes, jwt, "NOT")
+

@@ -22,7 +22,7 @@ from project.utils.comm_ret import comm_ret
 from project.models.auth_models import JWTBodyInfo
 from project.utils.jwt_auth import JWTAuth
 from project.utils import resp_code
-from project.dependencies.auth_depend import check_jwt
+from project.dependencies.auth_depend import check_jwt, not_realy_check_jwt
 
 
 logger = logging.getLogger(__name__)
@@ -63,7 +63,7 @@ def user_login(login_info: OAuth2PasswordRequestForm=Depends()):
 
 @user_auth.get("/refresh_token", name="刷新 Token 信息")
 def refresh_token(
-    jwt_info: JWTBodyInfo=Depends(check_jwt),
+    jwt_info: JWTBodyInfo=Depends(not_realy_check_jwt),
     refresh_jwt: constr(strip_whitespace=True, min_length=1)=Query(..., title="refresh_jwt")
 ):
     decode_status, _ = JWTAuth().decode_jwt(refresh_jwt)
