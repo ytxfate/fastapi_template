@@ -25,7 +25,7 @@ from project.utils import resp_code
 from project.dependencies.auth_depend import check_jwt, not_realy_check_jwt
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("uvicorn")
 
 user_auth = APIRouter()
 
