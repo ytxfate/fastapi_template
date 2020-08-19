@@ -26,7 +26,7 @@ __oauth2_scheme = OAuth2PasswordBearer(
     auto_error=False    # 不由 OAuth2PasswordBearer raise HTTPException
 )
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("uvicorn")
 
 def _check(
     security_scopes: SecurityScopes,

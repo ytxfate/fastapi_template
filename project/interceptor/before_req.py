@@ -17,7 +17,7 @@ from project.utils.jwt_auth import JWTAuth
 from project.utils.operate_mongodb import OperateMongodb
 
 
-logger = logging.getLogger('exception')
+logger = logging.getLogger("uvicorn")
 _, db_mongo = OperateMongodb().conn_mongodb()
 
 @app.middleware("http")

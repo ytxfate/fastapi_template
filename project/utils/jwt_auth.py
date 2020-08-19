@@ -16,7 +16,7 @@ from typing import Union, Tuple
 # User-defined Modules
 from project.config.sys_config import SECRET_KEY as jwt_secret_key
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("uvicorn")
 
 class JWTAuth:
     """

@@ -18,7 +18,7 @@ from project.utils.comm_ret import comm_ret
 from project.utils import resp_code
 
 
-logger = logging.getLogger('exception')
+logger = logging.getLogger("uvicorn")
 
 
 @app.exception_handler(RequestValidationError)
