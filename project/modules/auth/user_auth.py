@@ -22,7 +22,8 @@ from project.utils.comm_ret import comm_ret
 from project.models.auth_models import JWTBodyInfo
 from project.utils.jwt_auth import JWTAuth
 from project.utils import resp_code
-from project.dependencies.auth_depend import check_jwt, not_realy_check_jwt
+from project.dependencies.auth_depend import (check_jwt, not_realy_check_jwt,
+                                              _oauth2_scheme)
 
 
 logger = logging.getLogger("uvicorn")
@@ -63,16 +64,17 @@ def user_login(login_info: OAuth2PasswordRequestForm=Depends()):
 
 @user_auth.get("/refresh_token", name="刷新 Token 信息")
 def refresh_token(
-    jwt_info: JWTBodyInfo=Depends(not_realy_check_jwt),
+    jwt: constr(strip_whitespace=True)=Depends(_oauth2_scheme),
     refresh_jwt: constr(strip_whitespace=True, min_length=1)=Query(..., title="refresh_jwt")
 ):
-    decode_status, _ = JWTAuth().decode_jwt(refresh_jwt)
+    decode_status, data = JWTAuth().decode_jwt_check_refresh_jwt(jwt,
+                                                                 refresh_jwt)
     if decode_status is False:
-        return comm_ret(
-                code=resp_code.USER_NO_LOGIN, msg="刷新 jwt 失败，重新登录")
+        return comm_ret(code=resp_code.USER_NO_LOGIN,
+                        msg="刷新 jwt 失败，重新登录")
     
     status, new_jwt, new_refresh_jwt = JWTAuth().create_jwt_and_refresh_jwt(
-        jwt_info.dict())
+        data)
     if status is False:
         return comm_ret(code=resp_code.JWT_CREATE_ERROR, msg="JWT 信息生成异常")
 

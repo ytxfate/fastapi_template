@@ -20,7 +20,7 @@ from project.utils.jwt_auth import JWTAuth
 from project.models.auth_models import JWTBodyInfo
 
 
-__oauth2_scheme = OAuth2PasswordBearer(
+_oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl=prefix_api_path+"/user_auth/login",
     scopes={"emp": "emp", "cus": "cus"},
     auto_error=False    # 不由 OAuth2PasswordBearer raise HTTPException
@@ -30,7 +30,7 @@ logger = logging.getLogger("uvicorn")
 
 def _check(
     security_scopes: SecurityScopes,
-    jwt: constr(strip_whitespace=True)=Depends(__oauth2_scheme),
+    jwt: constr(strip_whitespace=True),
     jwt_stat: constr(strip_whitespace=True)=""
 ):
     """ token 检验
@@ -40,12 +40,13 @@ def _check(
                             detail="用户未登录")
     # 解析 jwt 信息
     if jwt_stat == "NOT":
-        user_info = JWTAuth().decode_jwt_without_check(jwt)
+        decode_status, user_info = JWTAuth().decode_jwt(jwt, False)
     else:
         decode_status, user_info = JWTAuth().decode_jwt(jwt)
-        if decode_status is False or not user_info:
-            raise HTTPException(status_code=resp_code.JWT_PARSE_ERROR,
-                                detail="刷新用户令牌中...")
+    
+    if decode_status is False or not user_info:
+        raise HTTPException(status_code=resp_code.JWT_PARSE_ERROR,
+                            detail="刷新用户令牌中...")
     try:
         jwtbi = JWTBodyInfo(**user_info)
     except Exception as e:
@@ -66,7 +67,7 @@ def _check(
 
 async def check_jwt(
     security_scopes: SecurityScopes,
-    jwt: constr(strip_whitespace=True)=Depends(__oauth2_scheme)
+    jwt: constr(strip_whitespace=True)=Depends(_oauth2_scheme)
 ):
     """ 通用 token 检验
     """
@@ -75,7 +76,7 @@ async def check_jwt(
 
 async def not_realy_check_jwt(
     security_scopes: SecurityScopes,
-    jwt: constr(strip_whitespace=True)=Depends(__oauth2_scheme)
+    jwt: constr(strip_whitespace=True)=Depends(_oauth2_scheme)
 ):
     """ 刷新 token 时调用
     """
