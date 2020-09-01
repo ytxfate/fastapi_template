@@ -2,15 +2,16 @@
 # -*- coding:utf-8 -*-
 
 '''
-@File :  comm_ret.py
+@File :  comm_ret.py  
 @Desc :  response 统一返回封装
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
+# Standard library imports
 from datetime import datetime, date
-# User-defined Modules
+# Third party imports
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+# Local application imports
 from project.utils.resp_code import SUCCESS
 
 

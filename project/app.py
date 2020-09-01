@@ -2,17 +2,20 @@
 # -*- coding:utf-8 -*-
 
 '''
-@File :  app.py
+@File :  app.py  
 @Desc :  项目基本配置模块
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
+# Standard library imports
+
+# Third party imports
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-# User-defined Modules
+# Local application imports
 from project.config.sys_config import (prefix_api_path, isFormalSystem,
                                        API_DOC_DESC, API_DOC_TITLE,
                                        API_DOC_VERSION)
+
 
 # 判断是否展示接口文档
 docs_url = (prefix_api_path + "/docs") if isFormalSystem is False else None

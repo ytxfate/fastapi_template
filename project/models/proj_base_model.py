@@ -6,10 +6,11 @@
 @Desc :  基本模型
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
-from pydantic import BaseModel
+# Standard library imports
 from datetime import datetime
-# User-defined Modules
+# Third party imports
+from pydantic import BaseModel
+# Local application imports
 
 
 class ProjectBaseModel(BaseModel):

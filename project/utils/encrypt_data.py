@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-# -*- encoding: utf-8 -*-
-
-#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
 '''
@@ -9,10 +6,12 @@
 @Desc :  数据加密
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
-import hashlib
+# Standard library imports
 from typing import Union
-# User-defined Modules
+import hashlib
+# Third party imports
+
+# Local application imports
 
 
 class EncrypData:

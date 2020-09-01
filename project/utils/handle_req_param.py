@@ -2,13 +2,15 @@
 # -*- coding:utf-8 -*-
 
 '''
-@File :  handle_req_param.py
+@File :  handle_req_param.py  
 @Desc :  检查及处理 request 请求参数
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
+# Standard library imports
 import re
-# User-defined Modules
+# Third party imports
+
+# Local application imports
 
 
 class HandleReqParam:

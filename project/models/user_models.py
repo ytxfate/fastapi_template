@@ -2,13 +2,15 @@
 # -*- coding:utf-8 -*-
 
 '''
-@File :  user.py  
+@File :  user_models.py  
 @Desc :  用户模板
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
+# Standard library imports
+
+# Third party imports
 from pydantic import BaseModel, Field, constr
-# User-defined Modules
+# Local application imports
 
 
 class UserLogin(BaseModel):

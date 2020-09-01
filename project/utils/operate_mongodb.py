@@ -2,17 +2,18 @@
 # -*- coding:utf-8 -*-
 
 '''
-@File :  operate_mongodb.py
+@File :  operate_mongodb.py  
 @Desc :  操作 MongoDB 数据库
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
-import pymongo
+# Standard library imports
 import threading
-
-# User-defined Modules
+# Third party imports
+import pymongo
+# Local application imports
 from project.config.db_config import MONGODB_CONF, MONGODB_CONF_T
 from project.config.sys_config import isFormalSystem
+
 
 class OperateMongodb:
     """

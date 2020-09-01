@@ -6,18 +6,19 @@
 @Desc :  认证
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
-from fastapi import Depends
-from fastapi.security import OAuth2PasswordBearer, SecurityScopes
-from fastapi.exceptions import HTTPException
-from pydantic import constr
+# Standard library imports
 import logging
-# User-defined Modules
+# Third party imports
+from fastapi import Depends
+from fastapi.exceptions import HTTPException
+from fastapi.security import OAuth2PasswordBearer, SecurityScopes
+from pydantic import constr
+# Local application imports
 from project.config.sys_config import prefix_api_path
-from project.utils.comm_ret import comm_ret
-from project.utils import resp_code
-from project.utils.jwt_auth import JWTAuth
 from project.models.auth_models import JWTBodyInfo
+from project.utils import resp_code
+from project.utils.comm_ret import comm_ret
+from project.utils.jwt_auth import JWTAuth
 
 
 _oauth2_scheme = OAuth2PasswordBearer(

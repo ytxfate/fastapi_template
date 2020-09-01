@@ -6,24 +6,25 @@
 @Desc :  用户认证
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
-from fastapi import APIRouter, Depends, Header, Query
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.security.utils import get_authorization_scheme_param
-from fastapi.exceptions import HTTPException
-from starlette.status import HTTP_401_UNAUTHORIZED
-from pydantic import constr
+# Standard library imports
 from datetime import datetime
 import logging
-# User-defined Modules
-from project.utils.comm_ret import comm_ret
-from project.models.auth_models import JWTBodyInfo
-from project.utils.jwt_auth import JWTAuth
-from project.utils import resp_code
+# Third party imports
+from fastapi import APIRouter, Depends, Header, Query
+from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import HTTPException
+from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security.utils import get_authorization_scheme_param
+from pydantic import constr
+from starlette.status import HTTP_401_UNAUTHORIZED
+# Local application imports
 from project.dependencies.auth_depend import (check_jwt, not_realy_check_jwt,
                                               _oauth2_scheme)
+from project.models.auth_models import JWTBodyInfo
+from project.utils import resp_code
+from project.utils.comm_ret import comm_ret
+from project.utils.jwt_auth import JWTAuth
 
 
 logger = logging.getLogger("uvicorn")

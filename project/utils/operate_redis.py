@@ -2,17 +2,18 @@
 # -*- coding:utf-8 -*-
 
 '''
-@File :  operate_redis.py
+@File :  operate_redis.py  
 @Desc :  操作 Redis 数据库
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
-import redis
+# Standard library imports
 import threading
-
-# User-defined Modules
+# Third party imports
+import redis
+# Local application imports
 from project.config.db_config import REDIS_CONF, REDIS_CONF_T
 from project.config.sys_config import isFormalSystem
+
 
 class OperateRedis:
     """

@@ -2,14 +2,15 @@
 # -*- coding:utf-8 -*-
 
 '''
-@File :  operate_minio.py
+@File :  operate_minio.py  
 @Desc :  操作 minio
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
-from minio import Minio
+# Standard library imports
 import threading
-# User-defined Modules
+# Third party imports
+from minio import Minio
+# Local application imports
 from project.config.db_config import Minio_config, Minio_config_test
 from project.config.sys_config import isFormalSystem
 

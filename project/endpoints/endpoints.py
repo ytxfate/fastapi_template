@@ -6,13 +6,16 @@
 @Desc :  路由管理
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
+# Standard library imports
+
+# Third party imports
 from fastapi import APIRouter, Depends
-# User-defined Modules
+# Local application imports
 from project.dependencies.auth_depend import check_jwt
 from project.modules.auth.user_auth import user_auth
-from project.modules.user.user import user_router
 from project.modules.info.info import info_router
+from project.modules.user.user import user_router
+
 
 api = APIRouter()
 

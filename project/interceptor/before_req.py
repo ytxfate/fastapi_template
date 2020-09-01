@@ -2,17 +2,18 @@
 # -*- coding:utf-8 -*-
 
 '''
-@File :  before_req.py
+@File :  before_req.py  
 @Desc :  请求拦截器
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
-from fastapi import Request
+# Standard library imports
 import logging
-# User-defined Modules
+# Third party imports
+from fastapi import Request
+# Local application imports
 from project.app import app
-from project.utils.comm_ret import comm_ret
 from project.utils import resp_code
+from project.utils.comm_ret import comm_ret
 from project.utils.jwt_auth import JWTAuth
 from project.utils.operate_mongodb import OperateMongodb
 

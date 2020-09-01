@@ -2,18 +2,19 @@
 # -*- coding:utf-8 -*-
 
 '''
-@File :  jwt_auth.py
+@File :  jwt_auth.py  
 @Desc :  JWT 编码、解码
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
+# Standard library imports
+from typing import Union, Tuple
 import datetime
-import time
-import jwt
 import hashlib
 import logging
-from typing import Union, Tuple
-# User-defined Modules
+import time
+# Third party imports
+import jwt
+# Local application imports
 from project.config.sys_config import SECRET_KEY as jwt_secret_key
 from project.utils.encrypt_data import EncrypData
 

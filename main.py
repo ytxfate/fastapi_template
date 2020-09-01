@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
+
 '''
 @File :  main.py  
 @Desc :  启动
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
+# Standard library imports
+
+# Third party imports
 import uvicorn
-# User-defined Modules
+# Local application imports
 from project.config.sys_config import app_run_conf, isFormalSystem
 
 

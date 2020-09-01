@@ -6,13 +6,16 @@
 @Desc :  测试信息
 '''
 
-# The Python Standard Modules(Library) and Third Modules(Library)
+# Standard library imports
+
+# Third party imports
 from fastapi import APIRouter, Security
-# User-defined Modules
-from project.models.auth_models import JWTBodyInfo
-from project.utils.comm_ret import comm_ret
-from project.utils import resp_code
+# Local application imports
 from project.dependencies.auth_depend import check_jwt
+from project.models.auth_models import JWTBodyInfo
+from project.utils import resp_code
+from project.utils.comm_ret import comm_ret
+
 
 info_router = APIRouter()
 
