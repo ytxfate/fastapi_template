@@ -95,10 +95,10 @@ class JWTAuth:
                                      refresh_jwt_str: str) -> Tuple[bool, dict]:
         """解析 jwt 及 refresh_jwt 认证信息
         """
-        jwt_stat, data = self.decode_jwt(jwt_str)
+        jwt_stat, data = self.decode_jwt(jwt_str, False)
         if jwt_stat is False:
             return False, {}
-        re_jwt_stat, re_data = self.decode_jwt(refresh_jwt_str, False)
+        re_jwt_stat, re_data = self.decode_jwt(refresh_jwt_str, True)
         if re_jwt_stat is False:
             return False, {}
         # 检验 jwt 与 refresh_jwt 是否匹配
