@@ -32,9 +32,9 @@ class OperateMongodb:
         """
         实现单例模式
         """
-        if not hasattr(cls, '._instance'):
+        if not hasattr(cls, '_instance'):
             with OperateMongodb._instance_lock:
-                if not hasattr(cls, '._instance'):
+                if not hasattr(cls, '_instance'):
                     OperateMongodb._instance = super().__new__(cls)
         return OperateMongodb._instance
     
