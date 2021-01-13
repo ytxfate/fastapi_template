@@ -45,7 +45,7 @@ async def sys_access_log(request: Request):
         'uri': request.url.path,
         'method': request.method,
         'ip': ip,
-        'url': request.url.path,
+        'url': request.url.components.geturl(),
         'query_params': request.query_params._dict,
         'path_params': request.path_params,
     }
