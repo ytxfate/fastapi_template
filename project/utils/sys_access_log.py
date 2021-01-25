@@ -48,6 +48,7 @@ async def sys_access_log(request: Request):
         'url': request.url.components.geturl(),
         'query_params': request.query_params._dict,
         'path_params': request.path_params,
+        'headers': request.headers.items(),
     }
     try:
         # 字符类参数可以进行编码存储
