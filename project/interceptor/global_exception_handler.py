@@ -17,18 +17,34 @@ from starlette.status import HTTP_401_UNAUTHORIZED
 from project.app import app
 from project.utils import resp_code
 from project.utils.comm_ret import comm_ret
+from project.config.sys_config import isFormalSystem
 
 
 logger = logging.getLogger("uvicorn")
+
+class ParamsValueError(ValueError):
+    """自定义参数校验异常  
+    此异常提示信息将整合进统一返回的 msg 中
+    """
+    pass
 
 
 @app.exception_handler(RequestValidationError)
 async def handle_request_validation_error(request: Request, exc: RequestValidationError):
     logger.exception(exc)
+    # 自定义异常提示
+    msg = set()
+    for err in exc.errors():
+        if err['type'] == "value_error.paramsvalue":
+            msg.add(err['msg'])
+    resp = {}
+    if not isFormalSystem:
+        resp = exc.errors()
+        
     return comm_ret(
         code=resp_code.PARAMETER_ERROR,
-        msg="请求参数异常",
-        resp=exc.errors()
+        msg="\n".join(msg) or "请求参数异常",
+        resp=resp
     )
 
 
