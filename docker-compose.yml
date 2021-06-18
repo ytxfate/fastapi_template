@@ -1,0 +1,23 @@
+version: '3'
+services: 
+    test:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        container_name: test
+        volumes: 
+            - .:/opt
+        command: python3 main.py
+        ports: 
+            - "5000:5000"
+#         networks: # 网络配置
+#             - docker_public_network
+#         logging: # 日志配置
+#             driver: "json-file"
+#             options: 
+#                 max-size: "100m"    # 单个日志文件容量
+#                 max-file: "2"   # 最多多少个日志文件
+
+# networks: # 网络配置
+#     docker_public_network:  # 公共网络创建命令: docker network create --subnet=192.111.0.0/16 --gateway=192.111.0.1 docker_public_network
+#         external: true
