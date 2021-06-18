@@ -57,7 +57,7 @@ class JWTAuth:
                 payload,
                 self.secret_key,
                 algorithm='HS256'
-            ).decode(encoding='utf-8')
+            )
             return True, jwt_body
         except Exception as e:
             logger.exception(e)
@@ -79,8 +79,9 @@ class JWTAuth:
         options={'verify_exp': verify_exp}
         try:
             jwt_payload = jwt.decode(
-                jwt_str.encode(encoding='utf-8'),
+                jwt_str,
                 self.secret_key,
+                algorithms=['HS256'],
                 options=options
             )
             if jwt_payload and 'data' in jwt_payload:
