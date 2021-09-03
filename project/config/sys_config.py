@@ -12,7 +12,7 @@ app_run_conf = {
     "HOST": "0.0.0.0",
     "PORT": 5000,
     "RELOAD": True,
-    "WORKERS": 1,
+    "WORKERS": 10,
     "DEBUG": True
 }
 
