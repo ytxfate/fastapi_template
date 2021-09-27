@@ -67,9 +67,11 @@ async def sys_access_log(request: Request):
 
     # 获取用户 JWT 中的信息
     auth_str = request.headers.get("Authorization") or ""
+    req_log_dict['user_info'] = {}
     _, jwt = get_authorization_scheme_param(auth_str)
-    _, user_info = JWTAuth().decode_jwt(jwt, False)
-    req_log_dict['user_info'] = user_info
+    if jwt:
+        _, user_info = JWTAuth().decode_jwt(jwt, False)
+        req_log_dict['user_info'] = user_info
     print(req_log_dict)   # 若要记录日志可在此处进行持久化操作
     
     await set_body(request, _body)
