@@ -31,7 +31,7 @@ class ParamsValueError(ValueError):
 
 @app.exception_handler(RequestValidationError)
 async def handle_request_validation_error(request: Request, exc: RequestValidationError):
-    logger.exception(exc)
+    logger.error(exc)
     # 自定义异常提示
     msg = set()
     for err in exc.errors():
@@ -50,7 +50,7 @@ async def handle_request_validation_error(request: Request, exc: RequestValidati
 
 @app.exception_handler(StarletteHTTPException)
 async def handle_http_exception(request: Request, exc: StarletteHTTPException):
-    logger.exception(exc)
+    logger.error(exc)
     # 用户认证
     # 此处添加异常校验的原因是 project/dependencies/auth_depend.py 中自定义的
     # check_jwt 函数只能通过 raise 异常的方式返回结果
@@ -69,7 +69,7 @@ async def handle_http_exception(request: Request, exc: StarletteHTTPException):
 
 @app.exception_handler(Exception)
 async def handle_all_exception(request: Request, exc: Exception):
-    logger.exception(exc)
+    logger.error(exc)
     return comm_ret(
         code=resp_code.EXCEPTION_ERROR,
         isSuccess=False,
