@@ -7,18 +7,13 @@
 '''
 
 # Standard library imports
-from copy import deepcopy
 # Third party imports
 import uvicorn
-from uvicorn.config import LOGGING_CONFIG
 # Local application imports
 from project.config.sys_config import app_run_conf, isFormalSystem
+from project.config.log_config import CUSTOM_LOGGING_CONFIG
 
 
-
-custom_logging_config = deepcopy(LOGGING_CONFIG)
-custom_logging_config['formatters']['default']['fmt'] = '%(asctime)s - ' + custom_logging_config['formatters']['default']['fmt']
-custom_logging_config['formatters']['access']['fmt'] = '%(asctime)s - ' + custom_logging_config['formatters']['access']['fmt']
 def main_run():
     if isFormalSystem is True:
         app_run_conf['RELOAD'] = False
@@ -29,7 +24,7 @@ def main_run():
                 reload=app_run_conf['RELOAD'],
                 workers=app_run_conf['WORKERS'],
                 debug=app_run_conf['DEBUG'],
-                log_config=custom_logging_config)
+                log_config=CUSTOM_LOGGING_CONFIG)
 
 
 if __name__ == "__main__":
