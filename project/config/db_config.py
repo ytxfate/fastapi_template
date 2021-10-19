@@ -82,3 +82,18 @@ Minio_config_test = {
     "ACCESS_KEY": "xxx",
     "SECRET_KEY": "xxx"
 }
+
+# elasticsearch
+ELASTICSEARCH_CONF = {
+    "HOSTS": [{'host': "127.0.0.1", "port": 9200}],
+    'AUTH': False,      # AUTH 为 True 时需要进行 用户认证
+    "USERNAME": "xxx",
+    "PASSWORD": "xxx",
+}
+
+ELASTICSEARCH_CONF_T = {
+    "HOSTS": [{'host': "127.0.0.1", "port": 9200}],
+    'AUTH': False,      # AUTH 为 True 时需要进行 用户认证
+    "USERNAME": "xxx",
+    "PASSWORD": "xxx",
+}
