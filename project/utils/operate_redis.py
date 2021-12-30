@@ -35,6 +35,7 @@ REDIS_CONF_NT.__new__.__defaults__ = ("127.0.0.1",
                                       0)
 # ============================================================================ #
 
+logger = logging.getLogger(__name__)
 
 class OperateRedis:
     """
@@ -50,7 +51,7 @@ class OperateRedis:
         # 判断获取那个连接配置
         tmp_conf = priority_conf or (REDIS_CONF if isFormalSystem else REDIS_CONF_T)
         self.redis_conf = REDIS_CONF_NT(**tmp_conf)
-        logging.info(self.redis_conf)
+        logger.info(self.redis_conf)
     
     
     def __new__(cls, *args, **kwargs):
@@ -81,7 +82,7 @@ class OperateRedis:
                 decode_responses=self.redis_conf.DECODE_RESPONSES
             )
         self.redis_cli = redis.Redis(connection_pool=pool, db=self.redis_conf.DEFAULT_DB)
-        logging.info("redis connected.")
+        logger.info("redis connected.")
 
 
     def get_conn(self):
@@ -101,4 +102,4 @@ class OperateRedis:
             self.redis_cli.close()
         except:
             pass
-        logging.info("redis closed.")
+        logger.info("redis closed.")

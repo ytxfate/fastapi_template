@@ -32,6 +32,7 @@ ELASTICSEARCH_CONF_NT.__new__.__defaults__ = (
 )
 # ============================================================================ #
 
+logger = logging.getLogger(__name__)
 
 class OperateElasticsearch:
     """
@@ -47,7 +48,7 @@ class OperateElasticsearch:
         # 判断获取那个连接配置
         tmp_conf = priority_conf or (ELASTICSEARCH_CONF if isFormalSystem else ELASTICSEARCH_CONF_T)
         self.es_conf = ELASTICSEARCH_CONF_NT(**tmp_conf)
-        logging.info(self.es_conf)
+        logger.info(self.es_conf)
 
 
     def __new__(cls, *args, **kwargs):
@@ -73,7 +74,7 @@ class OperateElasticsearch:
             conn_dict['http_auth'] = (self.es_conf.USERNAME,
                                       self.es_conf.PASSWORD)
         self.conn_es = elasticsearch.Elasticsearch(**conn_dict)
-        logging.info("elasticsearch connected.")
+        logger.info("elasticsearch connected.")
 
 
     def get_conn(self):
@@ -88,4 +89,4 @@ class OperateElasticsearch:
             self.conn_es.close()
         except:
             pass
-        logging.info("elasticsearch closed.")
+        logger.info("elasticsearch closed.")

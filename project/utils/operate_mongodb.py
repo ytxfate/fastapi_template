@@ -37,6 +37,7 @@ MONGODB_CONF_NT.__new__.__defaults__ = ("",
                                         "xxx")
 # ============================================================================ #
 
+logger = logging.getLogger(__name__)
 
 class OperateMongodb:
     """
@@ -52,7 +53,7 @@ class OperateMongodb:
         # 判断获取那个连接配置
         tmp_conf = priority_conf or (MONGODB_CONF if isFormalSystem else MONGODB_CONF_T)
         self.mongodb_conf = MONGODB_CONF_NT(**tmp_conf)
-        logging.info(self.mongodb_conf)
+        logger.info(self.mongodb_conf)
 
 
     def __new__(cls, *args, **kwargs):
@@ -81,7 +82,7 @@ class OperateMongodb:
         if self.mongodb_conf.AUTH is True:
             self.db_mongo.authenticate(self.mongodb_conf.USERNAME,
                                        self.mongodb_conf.PASSWORD)
-        logging.info("mongodb connected.")
+        logger.info("mongodb connected.")
 
 
     def get_conn_and_db(self):
@@ -103,4 +104,4 @@ class OperateMongodb:
             self.conn_mongo.close()
         except:
             pass
-        logging.info("mongodb closed.")
+        logger.info("mongodb closed.")
