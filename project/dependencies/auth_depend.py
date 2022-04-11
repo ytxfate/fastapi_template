@@ -10,6 +10,7 @@
 import logging
 # Third party imports
 from fastapi import Depends
+from fastapi.requests import Request
 from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordBearer, SecurityScopes
 from pydantic import constr
@@ -19,6 +20,7 @@ from project.models.auth_models import JWTBodyInfo
 from project.utils import resp_code
 from project.utils.comm_ret import comm_ret
 from project.utils.jwt_auth import JWTAuth
+from .req_depend import req_depend
 
 
 _oauth2_scheme = OAuth2PasswordBearer(
@@ -68,10 +70,12 @@ def _check(
 
 async def check_jwt(
     security_scopes: SecurityScopes,
-    jwt: constr(strip_whitespace=True)=Depends(_oauth2_scheme)
+    jwt: constr(strip_whitespace=True)=Depends(_oauth2_scheme),
+    req: Request=Depends(req_depend)
 ):
     """ 通用 token 检验
     """
+    print(req, req.url.path)
     return _check(security_scopes, jwt)
 
 
