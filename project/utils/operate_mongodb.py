@@ -39,11 +39,11 @@ MONGODB_CONF_NT.__new__.__defaults__ = ("",
 
 logger = logging.getLogger(__name__)
 
-class OperateMongodb:
+class __OperateMongodb:
     """
-    MongoDB 数据库操作
+    MongoDB 数据库操作 基本类
+    此方法不实现单例模式, 以适应多库连接操作
     """
-    _instance_lock = threading.Lock()
 
     conn_mongo, db_mongo = None, None
     
@@ -53,18 +53,6 @@ class OperateMongodb:
         # 判断获取那个连接配置
         tmp_conf = priority_conf or (MONGODB_CONF if isFormalSystem else MONGODB_CONF_T)
         self.mongodb_conf = MONGODB_CONF_NT(**tmp_conf)
-        logger.info(self.mongodb_conf)
-
-
-    def __new__(cls, *args, **kwargs):
-        """
-        实现单例模式
-        """
-        if not hasattr(cls, '_instance'):
-            with OperateMongodb._instance_lock:
-                if not hasattr(cls, '_instance'):
-                    OperateMongodb._instance = super().__new__(cls)
-        return OperateMongodb._instance
 
 
     def __conn_mongodb(self):
@@ -82,7 +70,7 @@ class OperateMongodb:
         if self.mongodb_conf.AUTH is True:
             self.db_mongo.authenticate(self.mongodb_conf.USERNAME,
                                        self.mongodb_conf.PASSWORD)
-        logger.info("mongodb connected.")
+        logger.info("mongodb connected: %s", self.mongodb_conf)
 
 
     def get_conn_and_db(self):
@@ -105,3 +93,36 @@ class OperateMongodb:
         except:
             pass
         logger.info("mongodb closed.")
+
+
+
+class OperateMongodb(__OperateMongodb):
+    """MongoDB 数据库操作
+    """
+    _instance_lock = threading.Lock()
+    
+    def __new__(cls, *args, **kwargs):
+        """
+        实现单例模式
+        """
+        if not hasattr(cls, '_instance'):
+            with OperateMongodb._instance_lock:
+                if not hasattr(cls, '_instance'):
+                    OperateMongodb._instance = super().__new__(cls)
+        return OperateMongodb._instance
+
+
+class OperateMongodbxxx(__OperateMongodb):
+    """MongoDB 数据库操作
+    """
+    _instance_lock = threading.Lock()
+    
+    def __new__(cls, *args, **kwargs):
+        """
+        实现单例模式
+        """
+        if not hasattr(cls, '_instance'):
+            with OperateMongodbxxx._instance_lock:
+                if not hasattr(cls, '_instance'):
+                    OperateMongodbxxx._instance = super().__new__(cls)
+        return OperateMongodbxxx._instance
