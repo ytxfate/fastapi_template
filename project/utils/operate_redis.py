@@ -18,7 +18,7 @@ from project.config.sys_config import isFormalSystem
 
 
 # ============================= 定义 Redis 连接配置 ============================ #
-REDIS_CONF_NT = namedtuple("Redis_CONFIG", [
+REDIS_CONF_NT = namedtuple("REDIS_CONFIG", [
     "HOST",         # 连接地址
     "PORT",         # 连接端口
     "AUTH",         # AUTH 为 True 时需要进行 用户认证
@@ -37,29 +37,19 @@ REDIS_CONF_NT.__new__.__defaults__ = ("127.0.0.1",
 
 logger = logging.getLogger(__name__)
 
-class OperateRedis:
+class __OperateRedis:
     """
     操作 Redis 数据库
     """
-    _instance_lock = threading.Lock()
-
     redis_cli = None
 
     def __init__(self, priority_conf: dict={}):
         """priority_conf 存在则优先使用
         """
         # 判断获取那个连接配置
-        tmp_conf = priority_conf or (REDIS_CONF if isFormalSystem else REDIS_CONF_T)
+        tmp_conf = priority_conf
         self.redis_conf = REDIS_CONF_NT(**tmp_conf)
         logger.info(self.redis_conf)
-    
-    
-    def __new__(cls, *args, **kwargs):
-        if not hasattr(cls, '_instance'):
-            with OperateRedis._instance_lock:
-                if not hasattr(cls, '_instance'):
-                    OperateRedis._instance = super().__new__(cls)
-        return OperateRedis._instance
 
     
     def __conn_redis(self):
@@ -103,3 +93,49 @@ class OperateRedis:
         except:
             pass
         logger.info("redis closed.")
+
+
+class OperateRedis(__OperateRedis):
+    """操作 Redis 数据库
+    """
+    _instance_lock = threading.Lock()
+    def __init__(self, priority_conf: dict={}):
+        """priority_conf 存在则优先使用
+        """
+        # 判断获取那个连接配置
+        tmp_conf = priority_conf or (REDIS_CONF if isFormalSystem else REDIS_CONF_T)
+        self.redis_conf = REDIS_CONF_NT(**tmp_conf)
+        logger.info(self.redis_conf)
+    
+    def __new__(cls, *args, **kwargs):
+        """
+        实现单例模式
+        """
+        if not hasattr(cls, '_instance'):
+            with OperateRedis._instance_lock:
+                if not hasattr(cls, '_instance'):
+                    OperateRedis._instance = super().__new__(cls)
+        return OperateRedis._instance
+
+
+class OperateRedisxxx(__OperateRedis):
+    """操作 Redis 数据库
+    """
+    _instance_lock = threading.Lock()
+    def __init__(self, priority_conf: dict={}):
+        """priority_conf 存在则优先使用
+        """
+        # 判断获取那个连接配置
+        tmp_conf = priority_conf or (REDIS_CONF if isFormalSystem else REDIS_CONF_T)
+        self.redis_conf = REDIS_CONF_NT(**tmp_conf)
+        logger.info(self.redis_conf)
+    
+    def __new__(cls, *args, **kwargs):
+        """
+        实现单例模式
+        """
+        if not hasattr(cls, '_instance'):
+            with OperateRedisxxx._instance_lock:
+                if not hasattr(cls, '_instance'):
+                    OperateRedisxxx._instance = super().__new__(cls)
+        return OperateRedisxxx._instance

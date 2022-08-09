@@ -51,7 +51,7 @@ class __OperateMongodb:
         """priority_conf 存在则优先使用
         """
         # 判断获取那个连接配置
-        tmp_conf = priority_conf or (MONGODB_CONF if isFormalSystem else MONGODB_CONF_T)
+        tmp_conf = priority_conf
         self.mongodb_conf = MONGODB_CONF_NT(**tmp_conf)
 
 
@@ -100,6 +100,12 @@ class OperateMongodb(__OperateMongodb):
     """MongoDB 数据库操作
     """
     _instance_lock = threading.Lock()
+    def __init__(self, priority_conf: dict={}):
+        """priority_conf 存在则优先使用
+        """
+        # 判断获取那个连接配置
+        tmp_conf = priority_conf or (MONGODB_CONF if isFormalSystem else MONGODB_CONF_T)
+        self.mongodb_conf = MONGODB_CONF_NT(**tmp_conf)
     
     def __new__(cls, *args, **kwargs):
         """
@@ -116,6 +122,12 @@ class OperateMongodbxxx(__OperateMongodb):
     """MongoDB 数据库操作
     """
     _instance_lock = threading.Lock()
+    def __init__(self, priority_conf: dict={}):
+        """priority_conf 存在则优先使用
+        """
+        # 判断获取那个连接配置
+        tmp_conf = priority_conf or (MONGODB_CONF if isFormalSystem else MONGODB_CONF_T)
+        self.mongodb_conf = MONGODB_CONF_NT(**tmp_conf)
     
     def __new__(cls, *args, **kwargs):
         """
