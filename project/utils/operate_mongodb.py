@@ -70,7 +70,7 @@ class __OperateMongodb:
         if self.mongodb_conf.AUTH is True:
             self.db_mongo.authenticate(self.mongodb_conf.USERNAME,
                                        self.mongodb_conf.PASSWORD)
-        logger.info("mongodb connected: %s", self.mongodb_conf)
+        logger.debug("mongodb connected: %s", self.mongodb_conf)
 
 
     def get_conn_and_db(self):

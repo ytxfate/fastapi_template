@@ -48,7 +48,7 @@ class OperateElasticsearch:
         # 判断获取那个连接配置
         tmp_conf = priority_conf or (ELASTICSEARCH_CONF if isFormalSystem else ELASTICSEARCH_CONF_T)
         self.es_conf = ELASTICSEARCH_CONF_NT(**tmp_conf)
-        logger.info(self.es_conf)
+        logger.debug(self.es_conf)
 
 
     def __new__(cls, *args, **kwargs):

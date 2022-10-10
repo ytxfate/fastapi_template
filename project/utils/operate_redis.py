@@ -49,7 +49,7 @@ class __OperateRedis:
         # 判断获取那个连接配置
         tmp_conf = priority_conf
         self.redis_conf = REDIS_CONF_NT(**tmp_conf)
-        logger.info(self.redis_conf)
+        logger.debug(self.redis_conf)
 
     
     def __conn_redis(self):
@@ -105,7 +105,7 @@ class OperateRedis(__OperateRedis):
         # 判断获取那个连接配置
         tmp_conf = priority_conf or (REDIS_CONF if isFormalSystem else REDIS_CONF_T)
         self.redis_conf = REDIS_CONF_NT(**tmp_conf)
-        logger.info(self.redis_conf)
+        logger.debug(self.redis_conf)
     
     def __new__(cls, *args, **kwargs):
         """
@@ -128,7 +128,7 @@ class OperateRedisxxx(__OperateRedis):
         # 判断获取那个连接配置
         tmp_conf = priority_conf or (REDIS_CONF if isFormalSystem else REDIS_CONF_T)
         self.redis_conf = REDIS_CONF_NT(**tmp_conf)
-        logger.info(self.redis_conf)
+        logger.debug(self.redis_conf)
     
     def __new__(cls, *args, **kwargs):
         """

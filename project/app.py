@@ -7,15 +7,17 @@
 '''
 
 # Standard library imports
-
+import logging
 # Third party imports
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 # Local application imports
 from project.config.sys_config import (prefix_api_path, isFormalSystem,
                                        API_DOC_DESC, API_DOC_TITLE,
-                                       API_DOC_VERSION)
+                                       API_DOC_VERSION, app_run_conf)
 
+
+logger = logging.getLogger(__name__)
 
 # 判断是否展示接口文档
 docs_url = (prefix_api_path + "/docs") if isFormalSystem is False else None
@@ -35,6 +37,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# 打印 api 文档路径
+if isFormalSystem is False:
+    logger.debug("%s api docs url: http://%s:%s%s", API_DOC_TITLE, app_run_conf['HOST'], app_run_conf['PORT'], docs_url)
 
 # 添加接口
 from project.endpoints.endpoints import api
