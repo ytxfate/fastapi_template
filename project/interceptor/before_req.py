@@ -15,12 +15,10 @@ from project.app import app
 from project.utils import resp_code
 from project.utils.comm_ret import comm_ret
 from project.utils.jwt_auth import JWTAuth
-from project.utils.operate_mongodb import OperateMongodb
 # from project.utils.sys_access_log import sys_access_log
 
 
 logger = logging.getLogger("uvicorn")
-_, db_mongo = OperateMongodb().conn_mongodb()
 
 @app.middleware("http")
 async def app_before_request(request: Request, call_next):
