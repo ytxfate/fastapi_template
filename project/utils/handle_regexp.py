@@ -12,7 +12,7 @@ import re
 # Local application imports
 
 
-NEED_EXCHG_CHAR = ['.', '^', '$', '*', '+', '?', '\\', '[', ']', '|',
+NEED_EXCHG_CHAR = ['\\', '.', '^', '$', '*', '+', '?', '[', ']', '|',
                    '{', '}', '(', ')']
 
 def handle_regexp(val: str):
