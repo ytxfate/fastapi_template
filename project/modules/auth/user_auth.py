@@ -10,7 +10,7 @@
 from datetime import datetime
 import logging
 # Third party imports
-from fastapi import APIRouter, Depends, Header, Query
+from fastapi import APIRouter, Depends, Header, Query, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
@@ -20,11 +20,13 @@ from pydantic import constr
 from starlette.status import HTTP_401_UNAUTHORIZED
 # Local application imports
 from project.dependencies.auth_depend import (check_jwt, not_realy_check_jwt,
-                                              _oauth2_scheme)
+                                                _oauth2_scheme)
 from project.models.auth_models import JWTBodyInfo
 from project.utils import resp_code
 from project.utils.comm_ret import comm_ret
 from project.utils.jwt_auth import JWTAuth
+from project.utils.sys_access_log import sys_access_log, SysLogModel
+from project.config.api_json import API_JSON
 
 
 logger = logging.getLogger("uvicorn")
@@ -33,7 +35,8 @@ user_auth = APIRouter()
 
 
 @user_auth.post('/login', name="登录")
-def user_login(login_info: OAuth2PasswordRequestForm=Depends()):
+async def user_login(request: Request, 
+            login_info: OAuth2PasswordRequestForm=Depends()):
     """用户登录  
     code 返回 1200 重新登录;  
     code 返回 200 时, resp 中返回 jwt 及 refresh_jwt 信息;  
@@ -50,7 +53,32 @@ def user_login(login_info: OAuth2PasswordRequestForm=Depends()):
     if status is False:
         return comm_ret(
             code=resp_code.JWT_CREATE_ERROR, msg="JWT 信息生成异常")
-    
+    # ================== 日志记录 ================== #
+    # 获取真实的 ip (可能存在 nginx 等方式的代理)
+    ip = request.client.host
+    __x_forwarded_for = request.headers.getlist("X-Forwarded-For") or []
+    __x_real_ip = request.headers.getlist("X-Real-Ip") or None
+    if __x_forwarded_for:
+        ip = __x_forwarded_for[0]
+    elif __x_real_ip:
+        ip = __x_real_ip
+
+    api_info = API_JSON.get('paths', {}).get(request.url.path, {})\
+        .get(request.method.lower(), {})
+    await sys_access_log(slm=SysLogModel(
+        uri=request.url.path,
+        method=request.method,
+        ip=ip,
+        url=request.url.components.geturl(),
+        headers=request.headers.items(),
+        query_params=request.query_params._dict,
+        path_params=request.path_params,
+        body="",
+        tags=";".join(api_info.get("tags", [])),
+        summary=api_info.get("summary", ""),
+        user_info=user_info,
+    ))
+    # ============================================== #
     return JSONResponse(content=jsonable_encoder({
         "code": resp_code.SUCCESS,
         "isSuccess": True,
