@@ -17,7 +17,7 @@ from project.config.sys_config import (prefix_api_path, isFormalSystem,
                                        API_DOC_VERSION, app_run_conf)
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("uvicorn")
 
 # 判断是否展示接口文档
 docs_url = (prefix_api_path + "/docs") if isFormalSystem is False else None
