@@ -22,6 +22,7 @@ from project.utils import resp_code
 from project.utils.comm_ret import comm_ret
 from project.utils.opt_redis_sentinel import OptRedisSentinel
 from project.utils.operate_redis import OperateRedis
+from project.dependencies.download_depend import check_download_jwt
 
 
 info_router = APIRouter()
@@ -90,7 +91,7 @@ def download_csv_use_generator():
 
 @info_router.get("/download_excel_use_IO")
 def download_excel_use_IO(
-    tk: str
+    jwtbi: JWTBodyInfo=Security(check_download_jwt, scopes=['info1'])
 ):
     sio = io.BytesIO()
     wb = xlwt.Workbook()

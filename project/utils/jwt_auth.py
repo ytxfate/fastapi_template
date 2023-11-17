@@ -31,8 +31,8 @@ class JWTAuth:
 
 
     def __encode_jwt(self,
-                     data: dict,
-                     validity_period: int=VALIDITY_PERIOD) -> Tuple[bool, str]:
+                    data: dict,
+                    validity_period: int=VALIDITY_PERIOD) -> Tuple[bool, str]:
         """
         生成 jwt 认证信息
             @param:
@@ -65,8 +65,8 @@ class JWTAuth:
 
 
     def decode_jwt(self,
-                   jwt_str: str,
-                   verify_exp: bool=True) -> Tuple[bool, dict]:
+                    jwt_str: str,
+                    verify_exp: bool=True) -> Tuple[bool, dict]:
         """
         解析 jwt 认证信息
             @param:
@@ -87,17 +87,14 @@ class JWTAuth:
             if jwt_payload and 'data' in jwt_payload:
                 return True, jwt_payload['data']
         except Exception as e:
-            if verify_exp is True:
-                logger.exception(e)
-            else:
-                logger.error(e)
+            logger.error(e)
                 
         return False, {}
 
 
     def decode_jwt_check_refresh_jwt(self,
-                                     jwt_str: str,
-                                     refresh_jwt_str: str) -> Tuple[bool, dict]:
+                                    jwt_str: str,
+                                    refresh_jwt_str: str) -> Tuple[bool, dict]:
         """解析 jwt 及 refresh_jwt 认证信息
         """
         jwt_stat, data = self.decode_jwt(jwt_str, False)
@@ -129,7 +126,7 @@ class JWTAuth:
         # 生成 jwt
         for _ in range(5):
             jwt_stat, jwt = self.__encode_jwt(data,
-                                              validity_period=validity_period)
+                                                validity_period=validity_period)
             if jwt_stat is True:
                 break
             else:
