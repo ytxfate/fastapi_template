@@ -12,7 +12,7 @@ import io
 import time
 from urllib.parse import quote
 # Third party imports
-from fastapi import APIRouter, Security
+from fastapi import APIRouter, Security, UploadFile, File
 from fastapi.responses import StreamingResponse, FileResponse
 import xlwt
 # Local application imports
@@ -89,7 +89,9 @@ def download_csv_use_generator():
 
 
 @info_router.get("/download_excel_use_IO")
-def download_excel_use_IO():
+def download_excel_use_IO(
+    tk: str
+):
     sio = io.BytesIO()
     wb = xlwt.Workbook()
     wb.encoding="utf-8"
@@ -106,6 +108,10 @@ def download_excel_use_IO():
         }
     )
 
+@info_router.post("/upload")
+def test_upload(f: UploadFile=File(...)):
+    return comm_ret(resp={'name': f.filename})
+    
 
 # ------------------------------ 数据库操作 ----------------------------------- #
 @info_router.get("/opt_redis_sentinel")

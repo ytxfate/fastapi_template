@@ -8,9 +8,12 @@
 
 # Standard library imports
 import logging
+import dataclasses
+from typing import ClassVar
 # Third party imports
 from fastapi import Request
 from starlette.requests import Message
+from starlette.types import Receive
 from fastapi.security.utils import get_authorization_scheme_param
 from pydantic import constr, conlist, Field, validator
 # Local application imports
@@ -22,21 +25,34 @@ from project.models.com_validator import vldtr_default_now_datetime
 logger = logging.getLogger("uvicorn")
 
 
-async def set_body(request: Request, body: bytes):
-    async def receive() -> Message:
-        return {"type": "http.request", "body": body}
-    request._receive = receive
+@dataclasses.dataclass
+class ReceiveProxy:
+    """Proxy to starlette.types.Receive.__call__ with caching first receive call."""
+
+    receive: Receive
+    cached_body: bytes
+    _is_first_call: ClassVar[bool] = True
+
+    async def __call__(self):
+        # First call will be for getting request body => returns cached result
+        if self._is_first_call:
+            self._is_first_call = False
+            return {"type": "http.request", "body": self.cached_body, "more_body": False}
+
+        return await self.receive()
 
 
-# async def get_body(request: Request) -> bytes:
-#     body = await request.body()
-#     await set_body(request, body)
-#     return body
+async def get_request_body(request: Request) -> bytes:
+    body = await request.body()
+    request._receive = ReceiveProxy(receive=request.receive, cached_body=body)
+    return body
+
 
 SYS_ACCESS_LOG_COLL_NAME = "sys_access_log"
 NEED_REMOVE_HEADERS = [ # 需要移除的请求头信息
     "connection",
 ]
+
 
 class SysLogModel(ProjectBaseModel):
     """日志模型"""
@@ -74,7 +90,7 @@ async def sys_access_log(request: Request=None, slm: SysLogModel=None):
         slm (SysLogModel): 日志模型, 部分接口没法复用 Request. Defaults to None.
     """
     if not slm:
-        _body = await request.body()
+        _body = await get_request_body(request)
         # 获取真实的 ip (可能存在 nginx 等方式的代理)
         ip = request.client.host
         __x_forwarded_for = request.headers.getlist("X-Forwarded-For") or []
@@ -110,9 +126,10 @@ async def sys_access_log(request: Request=None, slm: SysLogModel=None):
         # 获取用户 JWT 中的信息
         auth_str = request.headers.get("Authorization") or ""
         _, jwt = get_authorization_scheme_param(auth_str)
+        if "/download" in slm.uri:
+            jwt = slm.query_params.get("tk", "")
         if jwt:
             _, user_info = JWTAuth().decode_jwt(jwt, False)
             slm.user_info = user_info
-        await set_body(request, _body)
     
     print(slm.dict())   # 若要记录日志可在此处进行持久化操作

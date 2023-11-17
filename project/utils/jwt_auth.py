@@ -87,7 +87,11 @@ class JWTAuth:
             if jwt_payload and 'data' in jwt_payload:
                 return True, jwt_payload['data']
         except Exception as e:
-            logger.exception(e)
+            if verify_exp is True:
+                logger.exception(e)
+            else:
+                logger.error(e)
+                
         return False, {}
 
 
