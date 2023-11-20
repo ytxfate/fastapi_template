@@ -49,3 +49,34 @@ app.include_router(api, prefix=prefix_api_path)
 # 全局自定义异常处理
 import project.interceptor.global_exception_handler
 import project.interceptor.before_req
+
+# ------------------------------------ 接口文档 ------------------------------------ #
+# ====================================================== #
+# ======== uvloop==0.14.0 会导致 contextvars 失效 ======== #
+# ====================================================== #
+from fastapi.openapi.utils import get_openapi
+from project.config.api_json import API_JSON
+
+def simplify_openapi() -> dict:
+    # 1 用于日志记录
+    openapi_json = get_openapi(title=API_DOC_TITLE, version=API_DOC_VERSION,
+                                routes=app.routes)
+    # 剔除部分用不到的字段, 精简大小
+    # 1.1 接口描述部分
+    if 'paths' in openapi_json:
+        for _uri, _method_dict in openapi_json['paths'].items():
+            for _method, _body in _method_dict.items():
+                for n_k in ['requestBody', 'responses', 'parameters', 'security', 'operationId', 'description']:
+                    if n_k in _body:
+                        del openapi_json['paths'][_uri][_method][n_k]
+    # 1.2 结构体描述部分
+    for n_k in ['components']:
+        if n_k in openapi_json:
+            del openapi_json[n_k]
+    
+    API_JSON.set(openapi_json)
+    logger.debug(API_JSON.get())
+    return
+
+simplify_openapi()
+# ------------------------------------ 接口文档 ------------------------------------ #

@@ -100,7 +100,7 @@ async def sys_access_log(request: Request=None, slm: SysLogModel=None):
         elif __x_real_ip:
             ip = __x_real_ip
 
-        api_info = API_JSON.get('paths', {}).get(request.url.path, {})\
+        api_info = API_JSON.get().get('paths', {}).get(request.url.path, {})\
             .get(request.method.lower(), {})
         slm = SysLogModel(
             uri=request.url.path,

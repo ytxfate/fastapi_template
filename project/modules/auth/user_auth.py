@@ -63,7 +63,7 @@ async def user_login(request: Request,
     elif __x_real_ip:
         ip = __x_real_ip
 
-    api_info = API_JSON.get('paths', {}).get(request.url.path, {})\
+    api_info = API_JSON.get().get('paths', {}).get(request.url.path, {})\
         .get(request.method.lower(), {})
     await sys_access_log(slm=SysLogModel(
         uri=request.url.path,
