@@ -9,6 +9,7 @@
 from contextvars import ContextVar
 
 API_JSON = ContextVar("API_JSON")
+API_JSON.set({})    # 初始化
 """
 API_JSON 格式如下:
 {
