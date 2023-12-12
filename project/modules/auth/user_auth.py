@@ -65,6 +65,14 @@ async def user_login(request: Request,
 
     api_info = API_JSON.get().get('paths', {}).get(request.url.path, {})\
         .get(request.method.lower(), {})
+    _body = {
+        'grant_type': login_info.grant_type,
+        'username': login_info.username,
+        'password': login_info.password,
+        'scopes': login_info.scopes,
+        'client_id': login_info.client_id,
+        'client_secret': login_info.client_secret,
+    }
     await sys_access_log(slm=SysLogModel(
         uri=request.url.path,
         method=request.method,
@@ -73,7 +81,7 @@ async def user_login(request: Request,
         headers=request.headers.items(),
         query_params=request.query_params._dict,
         path_params=request.path_params,
-        body="",
+        body="&".join([f"{k}={v}" for k, v in _body.items() if v]), # 过滤掉空值
         tags=";".join(api_info.get("tags", [])),
         summary=api_info.get("summary", ""),
         user_info=user_info,
