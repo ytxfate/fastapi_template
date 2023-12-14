@@ -22,7 +22,7 @@ from project.utils.jwt_auth import JWTAuth
 from project.models.proj_base_model import ProjectBaseModel
 from project.models.com_validator import vldtr_default_now_datetime
 
-logger = logging.getLogger("uvicorn")
+logger = logging.getLogger(__name__)
 
 
 @dataclasses.dataclass

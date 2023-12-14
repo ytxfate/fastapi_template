@@ -11,7 +11,6 @@
 import uvicorn
 # Local application imports
 from project.config.sys_config import app_run_conf, isFormalSystem
-from project.config.log_config import CUSTOM_LOGGING_CONFIG
 
 
 def main_run():
@@ -24,7 +23,8 @@ def main_run():
                 reload=app_run_conf['RELOAD'],
                 workers=app_run_conf['WORKERS'],
                 debug=app_run_conf['DEBUG'],
-                log_config=CUSTOM_LOGGING_CONFIG)
+                log_config='project/config/logging.prod.ini' if isFormalSystem is True else 'project/config/logging.test.ini',
+                )
 
 
 if __name__ == "__main__":

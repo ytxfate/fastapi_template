@@ -32,7 +32,7 @@ ELASTICSEARCH_CONF_NT.__new__.__defaults__ = (
 )
 # ============================================================================ #
 
-logger = logging.getLogger("uvicorn")
+logger = logging.getLogger(__name__)
 
 class OperateElasticsearch:
     """

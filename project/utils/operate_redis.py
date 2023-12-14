@@ -35,7 +35,7 @@ REDIS_CONF_NT.__new__.__defaults__ = ("127.0.0.1",
                                       0)
 # ============================================================================ #
 
-logger = logging.getLogger("uvicorn")
+logger = logging.getLogger(__name__)
 
 class __OperateRedis:
     """

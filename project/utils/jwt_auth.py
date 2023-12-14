@@ -19,7 +19,7 @@ from project.config.sys_config import SECRET_KEY as jwt_secret_key
 from project.utils.encrypt_data import EncrypData
 
 
-logger = logging.getLogger("uvicorn")
+logger = logging.getLogger(__name__)
 
 class JWTAuth:
     """

@@ -37,7 +37,7 @@ MONGODB_CONF_NT.__new__.__defaults__ = ("",
                                         "xxx")
 # ============================================================================ #
 
-logger = logging.getLogger("uvicorn")
+logger = logging.getLogger(__name__)
 
 class __OperateMongodb:
     """
