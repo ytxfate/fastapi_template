@@ -13,6 +13,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.requests import Request
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.status import HTTP_401_UNAUTHORIZED
+from slowapi.errors import RateLimitExceeded
 # Local application imports
 from project.app import app
 from project.utils import resp_code
@@ -51,6 +52,13 @@ async def handle_request_validation_error(request: Request, exc: RequestValidati
 @app.exception_handler(StarletteHTTPException)
 async def handle_http_exception(request: Request, exc: StarletteHTTPException):
     logger.error(exc)
+    # slowapi 接口限流
+    if isinstance(exc, RateLimitExceeded):
+        return comm_ret(
+            code=resp_code.API_LIMIT,
+            isSuccess=False,
+            msg="限流"
+        )
     # 用户认证
     # 此处添加异常校验的原因是 project/dependencies/auth_depend.py 中自定义的
     # check_jwt 函数只能通过 raise 异常的方式返回结果

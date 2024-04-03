@@ -15,6 +15,7 @@ from starlette.middleware.cors import CORSMiddleware
 from project.config.sys_config import (prefix_api_path, isFormalSystem,
                                        API_DOC_DESC, API_DOC_TITLE,
                                        API_DOC_VERSION, app_run_conf)
+from project.utils.api_limiter import api_user_limiter
 
 
 logger = logging.getLogger("uvicorn")
@@ -27,6 +28,10 @@ openapi_url = (prefix_api_path + "/openapi.json") if isFormalSystem is False els
 app = FastAPI(docs_url=docs_url, redoc_url=redoc_url, openapi_url=openapi_url,
               title=API_DOC_TITLE, description=API_DOC_DESC,
               version=API_DOC_VERSION)
+
+# 接口限流
+app.state.limiter = api_user_limiter
+
 
 # 跨域处理
 app.add_middleware(

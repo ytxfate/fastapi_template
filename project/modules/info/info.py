@@ -12,7 +12,7 @@ import io
 import time
 from urllib.parse import quote
 # Third party imports
-from fastapi import APIRouter, Security, UploadFile, File
+from fastapi import APIRouter, Security, UploadFile, File, Depends
 from fastapi.responses import StreamingResponse, FileResponse
 import xlwt
 # Local application imports
@@ -132,3 +132,23 @@ def opt_redis():
     # print(redis_cli.hget("test", "test"))
     print(id(redis_cli))
     return comm_ret()
+
+
+from project.utils.api_limiter import api_user_limiter
+from fastapi.requests import Request
+
+@info_router.get("/limiter1")
+@api_user_limiter.limit("1/5second")
+def limiter1(
+    request: Request,
+):
+    return comm_ret(resp={'limiter1': 'limiter1'})
+
+
+@info_router.get("/limiter2")
+@api_user_limiter.limit("1/5second")    # [count] [per|/] [n (optional)] [second|minute|hour|day|month|year]
+def limiter2(
+    request: Request,
+    jwt_info: JWTBodyInfo=Depends(check_jwt)
+):
+    return comm_ret(resp={'limiter2': 'limiter2', 'jwt_info': jwt_info.dict()})

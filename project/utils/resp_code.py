@@ -27,3 +27,5 @@ USER_NO_LOGIN = 1200                    # 用户未登录
 USER_LOGOUT = 1201                      # 用户登出
 USER_NO_ROLES = 1202                    # 用户没有角色
 USER_NO_AUTHORITY = 1203                # 用户没有此接口权限
+# 接口相关
+API_LIMIT = 1300                        # 接口限流
