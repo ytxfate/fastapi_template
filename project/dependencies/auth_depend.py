@@ -20,7 +20,6 @@ from project.models.auth_models import JWTBodyInfo
 from project.utils import resp_code
 from project.utils.comm_ret import comm_ret
 from project.utils.jwt_auth import JWTAuth
-from .req_depend import req_depend
 
 
 _oauth2_scheme = OAuth2PasswordBearer(
@@ -69,13 +68,13 @@ def _check(
         return jwtbi
 
 async def check_jwt(
+    req: Request,
     security_scopes: SecurityScopes,
     jwt: constr(strip_whitespace=True)=Depends(_oauth2_scheme),
-    req: Request=Depends(req_depend)
 ):
     """ 通用 token 检验
     """
-    print(req, req.url.path)
+    print('check_jwt', req, req.url.path)
     return _check(security_scopes, jwt)
 
 

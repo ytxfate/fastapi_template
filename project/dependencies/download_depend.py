@@ -20,7 +20,6 @@ from project.models.auth_models import JWTBodyInfo
 from project.utils import resp_code
 from project.utils.comm_ret import comm_ret
 from project.utils.jwt_auth import JWTAuth
-from .req_depend import req_depend
 from .auth_depend import _check
 
 
@@ -37,7 +36,7 @@ class DownloadTkDepend():
 
 async def check_download_jwt(
     security_scopes: SecurityScopes,
-    jwt: Request=Depends(DownloadTkDepend())
+    jwt: str=Depends(DownloadTkDepend())
 ):
     """ 通用 token 检验
     """

@@ -1,8 +1,8 @@
-fastapi==0.68.1
-pydantic==1.8.2
-PyJWT==2.1.0
-pymongo==3.12.0
-python-multipart==0.0.5
+fastapi==0.103.2
+pydantic==1.10.13
+PyJWT==2.4.0
+pymongo==4.6.3
+python-multipart==0.0.7
 redis==4.6.0
 uvicorn==0.15.0
 xlrd==1.2.0
