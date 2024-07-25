@@ -85,3 +85,29 @@ def simplify_openapi() -> dict:
 
 simplify_openapi()
 # ------------------------------------ 接口文档 ------------------------------------ #
+
+# ------------------------------------ 全局后台任务(start) ------------------------------------ #
+import asyncio
+
+
+async def global_background_task_base():
+    while 1:
+        logger.debug("Background task is running...")
+        await asyncio.sleep(5)
+        raise ValueError('123')
+
+
+async def global_background_task():
+    while 1:
+        try:
+            await global_background_task_base()
+        except Exception as e:
+            logger.error("global_background_task: %s", e)
+        await asyncio.sleep(1)
+
+
+# 全局后台任务
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(global_background_task())
+# ------------------------------------ 全局后台任务(end) ------------------------------------ #
