@@ -11,10 +11,11 @@ import csv
 import io
 import time
 from urllib.parse import quote
+from collections.abc import AsyncIterable
 # Third party imports
 from fastapi import APIRouter, Security, UploadFile, File, Depends
-from fastapi.responses import StreamingResponse, FileResponse
-import xlwt
+from fastapi.responses import StreamingResponse, FileResponse, Response
+from openpyxl import Workbook
 # Local application imports
 from project.dependencies.auth_depend import check_jwt
 from project.models.auth_models import JWTBodyInfo
@@ -61,8 +62,8 @@ def download_csv_use_IO():
     # Change stream position
     mem.seek(0)
     io_stream.close()
-    return StreamingResponse(
-        mem, media_type="text/csv",
+    return Response(
+        mem.read(), media_type="text/csv",
         headers={
             'content-disposition': "attachment; filename*=utf-8''{}".format(
                 quote("测试.csv"))
@@ -88,26 +89,30 @@ def download_csv_use_generator():
                 quote("测试.csv"))
     })
 
-
+    
 @info_router.get("/download_excel_use_IO")
-def download_excel_use_IO(
+async def download_excel_use_IO(
     jwtbi: JWTBodyInfo=Security(check_download_jwt, scopes=['info1'])
 ):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "记录"
+
+    headers = ['标题1', '标题2', '标题3', '标题4', '标题5']
+    ws.append(headers)
+
     sio = io.BytesIO()
-    wb = xlwt.Workbook()
-    wb.encoding="utf-8"
-    ws = wb.add_sheet("记录")
-    for x, h in enumerate(['标题1','标题2','标题3','标题4','标题5']):
-        ws.write(0, x, h)
     wb.save(sio)
-    sio.seek(0)
-    return StreamingResponse(
-        sio, media_type="application/vnd.ms-excel",
+    sio.seek(0)  # 重置指针
+
+    return Response(
+        sio.read(), 
+        media_type="application/vnd.ms-excel",
         headers={
-            'Content-Type': 'application/octet-stream',
-            'Content-Disposition': 'attachment; filename=' + quote("测试.xls")
+            'Content-Disposition': f'attachment; filename*=utf-8\'\'{quote("测试.xlsx")}',
         }
     )
+
 
 @info_router.post("/upload")
 def test_upload(f: UploadFile=File(...)):

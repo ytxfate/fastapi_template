@@ -19,7 +19,7 @@ class ProjectBaseModel(BaseModel):
     """
 
     class Config():
-        anystr_strip_whitespace=True    # 去空
+        str_strip_whitespace=True    # 去空
         use_enum_values=True    # 用枚举的 value 属性填充模型
         json_encoders = {
             datetime: lambda v: v.strftime("%Y-%m-%d %H:%M:%S")

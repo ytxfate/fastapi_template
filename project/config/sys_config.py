@@ -13,7 +13,6 @@ app_run_conf = {
     "PORT": 5000,
     "RELOAD": True,
     "WORKERS": 10,
-    "DEBUG": True
 }
 
 SECRET_KEY = "xxx"
