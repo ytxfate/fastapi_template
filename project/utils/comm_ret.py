@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-'''
-@File :  comm_ret.py  
+"""
+@File :  comm_ret.py
 @Desc :  response 统一返回封装
-'''
+"""
 
-# Standard library imports
-from datetime import datetime, date
-# Third party imports
+from datetime import date, datetime
+
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-# Local application imports
+
 from project.utils.resp_code import SUCCESS
 
 
-def comm_ret(code: int = SUCCESS, isSuccess: bool = True,
-             msg: str = "请求成功", resp: object = {}):
+def comm_ret(
+    code: int = SUCCESS,
+    isSuccess: bool = True,
+    msg: str = "请求成功",
+    resp: object = {},
+):
     """
     接口统一返回模板
         @param:
@@ -27,16 +30,13 @@ def comm_ret(code: int = SUCCESS, isSuccess: bool = True,
         @return:
             return jsonify response
     """
-    ret_json = {
-        "code": code,
-        "isSuccess": isSuccess,
-        "msg": msg,
-        "resp": resp
-    }
-    return JSONResponse(content=jsonable_encoder(
-        ret_json,
-        custom_encoder={
-            datetime: lambda v: v.strftime("%Y-%m-%d %H:%M:%S"),
-            date: lambda v: v.strftime("%Y-%m-%d"),
-        }
-    ))
+    ret_json = {"code": code, "isSuccess": isSuccess, "msg": msg, "resp": resp}
+    return JSONResponse(
+        content=jsonable_encoder(
+            ret_json,
+            custom_encoder={
+                datetime: lambda v: v.strftime("%Y-%m-%d %H:%M:%S"),
+                date: lambda v: v.strftime("%Y-%m-%d"),
+            },
+        )
+    )

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-'''
+"""
 @File :  sys_config.py
 @Desc :  系统配置文件
-'''
+"""
 
 # ********** 运行配置 ********** #
 # 基本运行配置
