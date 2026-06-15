@@ -6,16 +6,11 @@
 @Desc :  项目基本配置模块
 """
 
-import asyncio
 import logging
 
 from fastapi import FastAPI
-from fastapi.openapi.utils import get_openapi
 from starlette.middleware.cors import CORSMiddleware
 
-import project.interceptor.before_req
-import project.interceptor.global_exception_handler
-from project.config.api_json import API_JSON
 from project.config.sys_config import (
     API_DOC_DESC,
     API_DOC_TITLE,
@@ -24,7 +19,6 @@ from project.config.sys_config import (
     isFormalSystem,
     prefix_api_path,
 )
-from project.endpoints.endpoints import api
 from project.utils.api_limiter import api_user_limiter
 
 logger = logging.getLogger("uvicorn")
@@ -66,7 +60,13 @@ if isFormalSystem is False:
         docs_url,
     )
 
+# 全局自定义异常处理
+import project.interceptor.before_req
+import project.interceptor.global_exception_handler
+
 # 添加接口
+from project.endpoints.endpoints import api
+
 app.include_router(api, prefix=prefix_api_path)
 
 
@@ -74,6 +74,9 @@ app.include_router(api, prefix=prefix_api_path)
 # ====================================================== #
 # ======== uvloop==0.14.0 会导致 contextvars 失效 ======== #
 # ====================================================== #
+from fastapi.openapi.utils import get_openapi
+
+from project.config.api_json import API_JSON
 
 
 def simplify_openapi():
@@ -103,13 +106,13 @@ def simplify_openapi():
 
     API_JSON.set(openapi_json)
     logger.debug(API_JSON.get())
-    return
 
 
 simplify_openapi()
 # ------------------------------------ 接口文档 ------------------------------------ #
 
 # ------------------------------------ 全局后台任务(start) ------------------------------------ #
+import asyncio
 
 
 async def global_background_task_base():

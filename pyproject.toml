@@ -15,4 +15,4 @@ dependencies = [
     "uvicorn==0.49.0",
 ]
 [tool.ruff.lint.per-file-ignores]
-"project/app.py" = ["F401"]
+"project/app.py" = ["F401", "E402"]
