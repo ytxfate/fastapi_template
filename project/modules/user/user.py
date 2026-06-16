@@ -18,4 +18,4 @@ user_router = APIRouter()
 @user_router.get("/")
 def get_user_info(jwt_info: JWTBodyInfo = Depends(check_jwt)):
     print(jwt_info)
-    return comm_ret(resp=jwt_info.dict())
+    return comm_ret(resp=jwt_info.model_dump())

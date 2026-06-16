@@ -19,7 +19,6 @@ from project.config.sys_config import prefix_api_path
 from project.models.auth_models import JWTBodyInfo
 from project.utils import resp_code
 from project.utils.jwt_auth import JWTAuth
-from typing_extensions import Annotated
 
 _oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl=prefix_api_path + "/user_auth/login",
@@ -33,7 +32,9 @@ logger = logging.getLogger("uvicorn")
 def _check(
     security_scopes: SecurityScopes,
     jwt: Annotated[str, Annotated[str, StringConstraints(strip_whitespace=True)]],
-    jwt_stat: Annotated[str, Annotated[str, StringConstraints(strip_whitespace=True)]] = "",
+    jwt_stat: Annotated[
+        str, Annotated[str, StringConstraints(strip_whitespace=True)]
+    ] = "",
 ):
     """token 检验"""
     if not jwt:
@@ -72,7 +73,9 @@ def _check(
 async def check_jwt(
     req: Request,
     security_scopes: SecurityScopes,
-    jwt: Annotated[str, Annotated[str, StringConstraints(strip_whitespace=True)]] = Depends(_oauth2_scheme),
+    jwt: Annotated[
+        str, Annotated[str, StringConstraints(strip_whitespace=True)]
+    ] = Depends(_oauth2_scheme),
 ):
     """通用 token 检验"""
     print("check_jwt", req, req.url.path)
@@ -81,7 +84,9 @@ async def check_jwt(
 
 async def not_realy_check_jwt(
     security_scopes: SecurityScopes,
-    jwt: Annotated[str, Annotated[str, StringConstraints(strip_whitespace=True)]] = Depends(_oauth2_scheme),
+    jwt: Annotated[
+        str, Annotated[str, StringConstraints(strip_whitespace=True)]
+    ] = Depends(_oauth2_scheme),
 ):
     """刷新 token 时调用"""
     return _check(security_scopes, jwt, "NOT")
