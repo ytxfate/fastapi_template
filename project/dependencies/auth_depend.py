@@ -78,7 +78,6 @@ async def check_jwt(
     ] = Depends(_oauth2_scheme),
 ):
     """通用 token 检验"""
-    print("check_jwt", req, req.url.path)
     return _check(security_scopes, jwt)
 
 

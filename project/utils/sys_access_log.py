@@ -160,4 +160,4 @@ async def sys_access_log(
             _, user_info = JWTAuth().decode_jwt(jwt, False)
             slm.user_info = user_info
 
-    print(slm.model_dump_json())  # 若要记录日志可在此处进行持久化操作
+    logger.info(slm.model_dump_json())  # 若要记录日志可在此处进行持久化操作
