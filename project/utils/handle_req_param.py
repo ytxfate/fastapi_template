@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-'''
-@File :  handle_req_param.py  
+"""
+@File :  handle_req_param.py
 @Desc :  检查及处理 request 请求参数
-'''
+"""
 
-# Standard library imports
 import re
-# Third party imports
-
-# Local application imports
 
 
 class HandleReqParam:
@@ -19,9 +15,10 @@ class HandleReqParam:
         @param:
             request_dict :  request 请求的参数及值
     """
+
     def __init__(self, request_dict: dict):
         self.request_dict = request_dict
-    
+
     def __remove_spaces(self):
         """
         去除 str 首尾的空格
@@ -45,7 +42,7 @@ class HandleReqParam:
                 return False
             # 参数类型为字符串时，值不能为空字符串
             if isinstance(self.request_dict[must_key], str):
-                if self.request_dict[must_key].strip() == '':
+                if self.request_dict[must_key].strip() == "":
                     return False
             else:
                 if self.request_dict[must_key] is None:
@@ -76,9 +73,14 @@ class HandleReqParam:
         for key, value in self.request_dict.items():
             if key in need_regexp_keys:
                 self.request_dict[key] = re.compile(value)
-    
-    def main_contraller(self, rm_spaces: bool=True, required_keys: list=[],
-                            allow_keys: list=[], regexp_keys: list=[]):
+
+    def main_contraller(
+        self,
+        rm_spaces: bool = True,
+        required_keys: list = [],
+        allow_keys: list = [],
+        regexp_keys: list = [],
+    ):
         """
         主控制器
             @param:
@@ -112,7 +114,8 @@ class HandleReqParam:
         if regexp_keys:
             self.__support_regex_choose(regexp_keys)
         # 判断检查的结果
-        if ((bool(required_keys) is check_status_imp) and
-                    (bool(allow_keys) is check_status_can)):
+        if (bool(required_keys) is check_status_imp) and (
+            bool(allow_keys) is check_status_can
+        ):
             check_status = True
         return (check_status, self.request_dict)

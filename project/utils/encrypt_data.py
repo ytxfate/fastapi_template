@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-'''
-@File :  encrypt_data.py  
+"""
+@File :  encrypt_data.py
 @Desc :  数据加密
-'''
+"""
 
-# Standard library imports
-from typing import Union
 import hashlib
-# Third party imports
-
-# Local application imports
+from typing import Union
 
 
 class EncrypData:
-    """MD5 及 HASH 加密
-    """
+    """MD5 及 HASH 加密"""
+
     def __init__(self, encrypt_data: Union[str, bytes]):
         if not isinstance(encrypt_data, (str, bytes)):
             raise TypeError("The encrypted data type is not supported")
@@ -26,9 +22,8 @@ class EncrypData:
 
         self.encrypt_data = encrypt_data
 
-
     def encrypt_md5(self) -> str:
-        """md5 加密  
+        """md5 加密
         @return:
             返回一个32位加密后的字符串
         """
@@ -37,7 +32,7 @@ class EncrypData:
         return m.hexdigest()
 
     def encrypt_sha1(self) -> str:
-        """hash 加密  
+        """hash 加密
         @return:
             返回一个40位加密后的字符串
         """
@@ -46,7 +41,7 @@ class EncrypData:
         return h.hexdigest()
 
     def encrypt_sha224(self) -> str:
-        """hash 加密  
+        """hash 加密
         @return:
             返回一个56位加密后的字符串
         """
@@ -55,7 +50,7 @@ class EncrypData:
         return h.hexdigest()
 
     def encrypt_sha256(self) -> str:
-        """hash 加密  
+        """hash 加密
         @return:
             返回一个64位加密后的字符串
         """
@@ -64,7 +59,7 @@ class EncrypData:
         return h.hexdigest()
 
     def encrypt_sha384(self) -> str:
-        """hash 加密  
+        """hash 加密
         @return:
             返回一个96位加密后的字符串
         """
@@ -73,7 +68,7 @@ class EncrypData:
         return h.hexdigest()
 
     def encrypt_sha512(self) -> str:
-        """hash 加密  
+        """hash 加密
         @return:
             返回一个128位加密后的字符串
         """
