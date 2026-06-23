@@ -49,9 +49,10 @@ REDIS_SENTINELS_CONFIG = {
         ("127.0.0.1", 26379)
     ],
     "SERVICE_NAME": "mymaster",
-    "AUTH": True,  # AUTH 为 True 时需要进行 用户认证
     "PASSWORD": "test",
+    "SENTINEL_PWD": "test",
     "DECODE_RESPONSES": True,  # 是否对查询结果进行编码处理
+    "DB": 0,
 }
 
 REDIS_SENTINELS_CONFIG_T = {
@@ -61,9 +62,10 @@ REDIS_SENTINELS_CONFIG_T = {
         ("127.0.0.1", 20006),
     ],
     "SERVICE_NAME": "mymaster",
-    "AUTH": True,  # AUTH 为 True 时需要进行 用户认证
     "PASSWORD": "test",
+    "SENTINEL_PWD": "test",
     "DECODE_RESPONSES": True,  # 是否对查询结果进行编码处理
+    "DB": 0,
 }
 
 # Minio
