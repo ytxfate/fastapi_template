@@ -68,3 +68,8 @@ docker build -f Dockerfile -t 'fastapi_template_uv:1.0' .
 ```bash
 docker-compose up -d
 ```
+
+### 测试
+```bash
+uv tool run pytest
+```
