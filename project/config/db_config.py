@@ -71,9 +71,17 @@ REDIS_SENTINELS_CONFIG_T = {
 # Minio
 MINIO_BUCKET_NAME = "test"
 
-Minio_config = {"URL": "127.0.0.1:9000", "ACCESS_KEY": "xxx", "SECRET_KEY": "xxx"}
+MINIO_CONFIG = {
+    "URL": "127.0.0.1:9000",
+    "ACCESS_KEY": "xxx",
+    "SECRET_KEY": "xxx",
+}
 
-Minio_config_test = {"URL": "127.0.0.1:9000", "ACCESS_KEY": "xxx", "SECRET_KEY": "xxx"}
+MINIO_CONFIG_TEST = {
+    "URL": "127.0.0.1:9000",
+    "ACCESS_KEY": "xxx",
+    "SECRET_KEY": "xxx",
+}
 
 # elasticsearch
 ELASTICSEARCH_CONF = {

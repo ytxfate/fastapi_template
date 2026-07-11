@@ -8,6 +8,7 @@
 
 import logging
 import threading
+import time
 from collections import namedtuple
 from typing import Tuple, Union
 
@@ -78,28 +79,62 @@ class __OptRedisSentinel:
             self.conn_kwargs["password"] = self.conf.PASSWORD
         if self.conf.SENTINEL_PWD:
             self.sentinel_kwargs["password"] = self.conf.SENTINEL_PWD
-        logger.debug(self.conf)
+        self.__conn_redis()
 
-    def __conn_redis(self):
-        sentinel = Sentinel(
-            self.conf.SENTINELS,
-            sentinel_kwargs=self.sentinel_kwargs,
-            decode_responses=self.conf.DECODE_RESPONSES,
-            **self.conn_kwargs,
-        )
-        self.master = sentinel.master_for(
-            self.conf.SERVICE_NAME,
-        )
-        self.slave = sentinel.slave_for(
-            self.conf.SERVICE_NAME,
-        )
+    def __conn_redis(self, enforce: bool = False):
+        if (
+            (not hasattr(self, "master"))
+            or (not hasattr(self, "slave"))
+            or enforce is True
+        ):
+            sentinel = Sentinel(
+                self.conf.SENTINELS,
+                sentinel_kwargs=self.sentinel_kwargs,
+                decode_responses=self.conf.DECODE_RESPONSES,
+                **self.conn_kwargs,
+            )
+            self.master = sentinel.master_for(
+                self.conf.SERVICE_NAME,
+            )
+            self.slave = sentinel.slave_for(
+                self.conf.SERVICE_NAME,
+            )
+            logger.debug(self.conf)
+            logger.info("redis connected.")
 
-    def conn_redis(self) -> Tuple[Redis, Redis]:
+    def reconnect(self):
+        self.close()
+        self.__conn_redis(True)
+
+    def get_conn(self) -> Tuple[Redis, Redis]:
         """
         连接 Redis 数据库
             @return:
                 redis_master_connection, redis_slave_connection
         """
+        while 1:
+            try:
+                self.master.ping()
+                self.slave.ping()
+                break
+            except RedisError:
+                time.sleep(1)
+                self.reconnect()
+        return self.master, self.slave
+
+    def close(self):
+        try:
+            self.master.close()
+            self.slave.close()
+        except RedisError:
+            pass
+        logger.info("redis closed.")
+
+    def __del__(self):
+        self.close()
+
+    def conn_redis(self) -> Tuple[Redis, Redis]:
+        """兼容老代码"""
         if not hasattr(self, "master") or not hasattr(self, "slave"):
             self.__conn_redis()
         return self.master, self.slave
@@ -127,3 +162,12 @@ class OptRedisSentinel(__OptRedisSentinel):
                 if not hasattr(cls, "_instance"):
                     OptRedisSentinel._instance = super().__new__(cls)
         return OptRedisSentinel._instance
+
+
+if __name__ == "__main__":
+    master, slave = OptRedisSentinel().get_conn()
+    print(master, slave, id(master), id(slave))
+    print(master.ping())
+    master2, slave2 = OptRedisSentinel().get_conn()
+    print(master2, slave2, id(master2), id(slave2))
+    print(master2.ping())
