@@ -14,5 +14,22 @@ dependencies = [
     "slowapi==0.1.9",
     "uvicorn==0.49.0",
 ]
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.15.21",
+]
 [tool.ruff.lint.per-file-ignores]
 "project/app.py" = ["F401", "E402"]
+[tool.pytest.ini_options]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = ["-v", "--tb=short", "--strict-markers"]
+markers = [
+    "slow: 标记为慢速测试",
+    "integration: 集成测试，需要外部服务",
+]
+norecursedirs = [".git", ".venv", "venv", "__pycache__", "dist", "build"]
+minversion = "7.0"
+pythonpath = "."

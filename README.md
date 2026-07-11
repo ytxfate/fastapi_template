@@ -71,5 +71,5 @@ docker-compose up -d
 
 ### 测试
 ```bash
-uv tool run pytest
+uv run pytest
 ```
