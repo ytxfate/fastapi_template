@@ -128,6 +128,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "elasticsearch" },
     { name = "fastapi" },
+    { name = "minio" },
     { name = "openpyxl" },
     { name = "pymongo" },
     { name = "python-multipart" },
@@ -146,6 +147,7 @@ dev = [
 requires-dist = [
     { name = "elasticsearch", specifier = "==7.12.0" },
     { name = "fastapi", specifier = "==0.136.3" },
+    { name = "minio", specifier = "==7.0.3" },
     { name = "openpyxl", specifier = "==3.1.5" },
     { name = "pymongo", specifier = "==4.17.0" },
     { name = "python-multipart", specifier = "==0.0.32" },
@@ -199,6 +201,19 @@ dependencies = [
 sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/71/69/826a5d1f45426c68d8f6539f8d275c0e4fcaa57f0c017ec3100986558a41/limits-5.8.0.tar.gz", hash = "sha256:c9e0d74aed837e8f6f50d1fcebcf5fd8130957287206bc3799adaee5092655da", size = 226104, upload-time = "2026-02-05T07:17:35.859Z" }
 wheels = [
     { url = "https://pypi.tuna.tsinghua.edu.cn/packages/b9/98/cb5ca20618d205a09d5bec7591fbc4130369c7e6308d9a676a28ff3ab22c/limits-5.8.0-py3-none-any.whl", hash = "sha256:ae1b008a43eb43073c3c579398bd4eb4c795de60952532dc24720ab45e1ac6b8", size = 60954, upload-time = "2026-02-05T07:17:34.425Z" },
+]
+
+[[package]]
+name = "minio"
+version = "7.0.3"
+source = { registry = "https://pypi.tuna.tsinghua.edu.cn/simple" }
+dependencies = [
+    { name = "certifi" },
+    { name = "urllib3" },
+]
+sdist = { url = "https://pypi.tuna.tsinghua.edu.cn/packages/e1/52/fc541b314f030f0fcbe8a621171607585291cf1ab980797a86ea0a85f2a9/minio-7.0.3.tar.gz", hash = "sha256:5ce9eb66cc464b1860c379a69f25926dabd16f4d6acb8dd45f68d7ccd7629fcc", size = 114436, upload-time = "2021-04-06T21:08:34.043Z" }
+wheels = [
+    { url = "https://pypi.tuna.tsinghua.edu.cn/packages/5f/c9/09761948bb0c73e08e803dfc616e2f3829a790349ba18dcffdf6a4608f2d/minio-7.0.3-py3-none-any.whl", hash = "sha256:0c92711535253958e06f0ec3bb36889595eafa93bad41addfa7641c9f613aa3b", size = 75191, upload-time = "2021-04-06T21:08:32.481Z" },
 ]
 
 [[package]]
