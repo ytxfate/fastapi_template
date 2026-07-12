@@ -7,8 +7,9 @@
 """
 
 from datetime import datetime
+from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, StringConstraints
 
 
 class ProjectBaseModel(BaseModel):
@@ -21,3 +22,12 @@ class ProjectBaseModel(BaseModel):
         use_enum_values=True,
         json_encoders={datetime: lambda v: v.strftime("%Y-%m-%d %H:%M:%S")},
     )
+
+
+class JWTBodyInfo(ProjectBaseModel):
+    """jwt 中存储的信息"""
+
+    username: Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+    scopes: list[
+        Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+    ] = []

@@ -17,8 +17,8 @@ from starlette.types import Receive
 from typing_extensions import Annotated
 
 from project.config.api_json import API_JSON
-from project.models.com_validator import vldtr_default_now_datetime
-from project.models.proj_base_model import ProjectBaseModel
+from project.controller.com_validator import vldtr_default_now_datetime
+from project.controller.proj_base_model import ProjectBaseModel
 from project.utils.jwt_auth import JWTAuth
 
 logger = logging.getLogger(__name__)

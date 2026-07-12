@@ -17,10 +17,9 @@ from pydantic import StringConstraints
 
 from project.config.api_json import API_JSON
 from project.dependencies.auth_depend import _oauth2_scheme
-from project.models.auth_models import JWTBodyInfo
+from project.service.auth.user_auth import srvc_refresh_token, srvc_user_login
 from project.utils import resp_code
 from project.utils.comm_ret import comm_ret
-from project.utils.jwt_auth import JWTAuth
 from project.utils.sys_access_log import SysLogModel, sys_access_log
 
 logger = logging.getLogger("uvicorn")
@@ -29,7 +28,7 @@ user_auth = APIRouter()
 
 
 @user_auth.post("/login", name="登录")
-async def user_login(
+async def ctr_user_login(
     request: Request, login_info: OAuth2PasswordRequestForm = Depends()
 ):
     """用户登录
@@ -43,10 +42,9 @@ async def user_login(
     code == 1200 , 需重新登录后跳转;
     code == 1101 , 再次请求; (基本不需要)
     """
-    user_info = JWTBodyInfo(username="user", scopes=["info1"]).dict()
-    status, jwt, refresh_jwt = JWTAuth().create_jwt_and_refresh_jwt(user_info)
-    if status is False:
-        return comm_ret(code=resp_code.JWT_CREATE_ERROR, msg="JWT 信息生成异常")
+    code, jwt, refresh_jwt, msg, user_info = await srvc_user_login(
+        login_info.username, login_info.password
+    )
     # ================== 日志记录 ================== #
     # 获取真实的 ip (可能存在 nginx 等方式的代理)
     ip = [request.client.host]
@@ -88,6 +86,8 @@ async def user_login(
         )
     )
     # ============================================== #
+    if code != resp_code.SUCCESS:
+        return comm_ret(code=code, msg=msg)
     return JSONResponse(
         content=jsonable_encoder(
             {
@@ -102,7 +102,7 @@ async def user_login(
 
 
 @user_auth.get("/refresh_token", name="刷新 Token 信息")
-def refresh_token(
+async def refresh_token(
     jwt: Annotated[
         str, Annotated[str, StringConstraints(strip_whitespace=True)]
     ] = Depends(_oauth2_scheme),
@@ -110,12 +110,7 @@ def refresh_token(
         str, Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
     ] = Query(..., title="refresh_jwt"),
 ):
-    decode_status, data = JWTAuth().decode_jwt_check_refresh_jwt(jwt, refresh_jwt)
-    if decode_status is False:
-        return comm_ret(code=resp_code.USER_NO_LOGIN, msg="刷新 jwt 失败，重新登录")
-
-    status, new_jwt, new_refresh_jwt = JWTAuth().create_jwt_and_refresh_jwt(data)
-    if status is False:
-        return comm_ret(code=resp_code.JWT_CREATE_ERROR, msg="JWT 信息生成异常")
-
+    code, new_jwt, new_refresh_jwt, msg = await srvc_refresh_token(jwt, refresh_jwt)
+    if code != resp_code.SUCCESS:
+        return comm_ret(code=code, msg=msg)
     return comm_ret(resp={"jwt": new_jwt, "refresh_jwt": new_refresh_jwt})
