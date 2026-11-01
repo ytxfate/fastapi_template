@@ -8,10 +8,10 @@
 
 from fastapi import APIRouter, Depends
 
+from project.controller.auth.user_auth import user_auth
+from project.controller.info.info import info_router
+from project.controller.user.user import user_router
 from project.dependencies.auth_depend import check_jwt
-from project.modules.auth.user_auth import user_auth
-from project.modules.info.info import info_router
-from project.modules.user.user import user_router
 
 api = APIRouter()
 

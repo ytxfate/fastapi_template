@@ -16,9 +16,9 @@ from fastapi.requests import Request
 from fastapi.responses import Response, StreamingResponse
 from openpyxl import Workbook
 
+from project.controller.proj_base_model import JWTBodyInfo
 from project.dependencies.auth_depend import check_jwt
 from project.dependencies.download_depend import check_download_jwt
-from project.models.auth_models import JWTBodyInfo
 from project.utils.api_limiter import api_user_limiter
 from project.utils.comm_ret import comm_ret
 from project.utils.operate_redis import OperateRedis
@@ -31,12 +31,12 @@ redis_m, redis_s = OptRedisSentinel().conn_redis()
 # ----------------------------- 权限控制 -------------------------------------- #
 @info_router.get("/dep_security_1")
 def dep_security_1(jwtbi: JWTBodyInfo = Security(check_jwt, scopes=["info1"])):
-    return comm_ret(resp=jwtbi.dict())
+    return comm_ret(resp=jwtbi.model_dump())
 
 
 @info_router.get("/dep_security_2")
 def dep_security_2(jwtbi: JWTBodyInfo = Security(check_jwt, scopes=["info2"])):
-    return comm_ret(resp=jwtbi.dict())
+    return comm_ret(resp=jwtbi.model_dump())
 
 
 # ------------------------------- 下载 --------------------------------------- #
@@ -153,4 +153,4 @@ def limiter1(
     "1/5second"
 )  # [count] [per|/] [n (optional)] [second|minute|hour|day|month|year]
 def limiter2(request: Request, jwt_info: JWTBodyInfo = Depends(check_jwt)):
-    return comm_ret(resp={"limiter2": "limiter2", "jwt_info": jwt_info.dict()})
+    return comm_ret(resp={"limiter2": "limiter2", "jwt_info": jwt_info.model_dump()})

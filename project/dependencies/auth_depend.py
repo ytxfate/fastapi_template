@@ -16,7 +16,7 @@ from fastapi.security import OAuth2PasswordBearer, SecurityScopes
 from pydantic import StringConstraints
 
 from project.config.sys_config import prefix_api_path
-from project.models.auth_models import JWTBodyInfo
+from project.controller.proj_base_model import JWTBodyInfo
 from project.utils import resp_code
 from project.utils.jwt_auth import JWTAuth
 

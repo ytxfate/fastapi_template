@@ -8,8 +8,8 @@
 
 from fastapi import APIRouter, Depends
 
+from project.controller.proj_base_model import JWTBodyInfo
 from project.dependencies.auth_depend import check_jwt
-from project.models.auth_models import JWTBodyInfo
 from project.utils.comm_ret import comm_ret
 
 user_router = APIRouter()
